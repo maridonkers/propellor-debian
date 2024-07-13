@@ -239,11 +239,11 @@ Library
     System.Process.Concurrent
     Paths_propellor
 
-library quasiquote
-  exposed-modules:     Quasiquote
-  hs-source-dirs:      lib
-  build-depends:       base >=4.7 && <5, template-haskell
-  default-language:    Haskell2010
+Library quasiquote
+  Exposed-Modules:     Quasiquote
+  Hs-Source-Dirs:      lib
+  Build-Depends:       base, template-haskell
+  Default-Language:    Haskell2010
 
 Executable propellor-config
   Default-Language: Haskell2010
@@ -260,6 +260,6 @@ Executable propellor
   GHC-Options: -threaded -Wall -fno-warn-tabs
   Build-Depends: propellor, base
 
-source-repository head
-  type: git
-  location: https://git.joeyh.name/git/propellor.git
+-- source-repository head
+--   type: git
+--   location: https://git.joeyh.name/git/propellor.git
