@@ -412,7 +412,7 @@ sapientia =
       where
         addedLines =
           [ propellorMark,
-            "Match host localhost",
+            "Match host 127.0.0.1",
             "    PasswordAuthentication yes",
             "    PermitRootLogin yes",
             "Match all"
