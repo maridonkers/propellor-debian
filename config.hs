@@ -1,5 +1,7 @@
 -- This is the main configuration file for Propellor, and is used to build
 -- the propellor program.
+{-# LANGUAGE QuasiQuotes #-}
+
 import Data.List
 import Propellor
 import qualified Propellor.Property.Apt as Apt
@@ -12,6 +14,7 @@ import qualified Propellor.Property.Ssh as Ssh
 import qualified Propellor.Property.Sudo as Sudo
 import qualified Propellor.Property.Systemd as Systemd
 import qualified Propellor.Property.User as User
+import Quasiquote (config)
 
 main :: IO ()
 main = defaultMain hosts
@@ -430,45 +433,49 @@ sapientia =
           | keyword `isInfixOf` l = l : addLines ++ ls
           | otherwise = l : findAndAdd keyword addLines ls
 
-    {-
-     -- TODO Read this from a configuration file
-    i3Config =
-      "TODO"
+{-
+ -- TODO Read this from a configuration file
+i3Config =
+  "TODO"
 
-    -- TODO Read this from a configuration file
-    i3StatusConfig =
-      "TODO"
-    -}
+-- TODO Read this from a configuration file
+i3StatusConfig =
+  "TODO"
+-}
 
-    -- TODO Read this from a configuration file
-    nftRules =
-      "#!/usr/sbin/nft -f\n\n\
-      \table firewall {\n\
-      \  chain incoming {\n\
-      \    type filter hook input priority 0; policy drop;\n\
-      \    # established/related connections\n\
-      \    ct state established,related accept\n\
-      \    # loopback interface\n\
-      \    iifname lo accept\n\
-      \    # icmp\n\
-      \    icmp type echo-request accept\n\
-      \    # open tcp ports: sshd (22), etc.\n\
-      \    tcp dport { ssh, 1234, 3333, 8080, 8096 } accept\n\
-      \  }\n\
-      \}\n\n\
-      \table ip6 firewall {\n\
-      \  chain incoming {\n\
-      \    type filter hook input priority 0; policy drop;\n\
-      \    # established/related connections\n\
-      \    ct state established,related accept\n\
-      \    # invalid connections\n\
-      \    ct state invalid drop\n\
-      \    # loopback interface\n\
-      \    iifname lo accept\n\
-      \    # icmp\n\
-      \    # routers may also want: mld-listener-query, nd-router-solicit\n\
-      \    icmpv6 type { echo-request, nd-neighbor-solicit } accept\n\
-      \    # open tcp ports: sshd (22), etc.\n\
-      \    tcp dport { ssh, 1234, 3333, 8080, 8096 } accept\n\
-      \  }\n\
-      \}"
+-- TODO Read this from a configuration file
+nftRules :: String
+nftRules =
+  [config|#!/usr/sbin/nft -f
+
+table firewall {
+  chain incoming {
+    type filter hook input priority 0; policy drop;
+    # established/related connections
+    ct state established,related accept
+    # loopback interface
+    iifname lo accept
+    # icmp
+    icmp type echo-request accept
+    # open tcp ports: sshd (22), etc.
+    tcp dport { ssh, 1234, 3333, 8080, 8096 } accept
+  }
+}
+
+table ip6 firewall {
+  chain incoming {
+    type filter hook input priority 0; policy drop;
+    # established/related connections
+    ct state established,related accept
+    # invalid connections
+    ct state invalid drop
+    # loopback interface
+    iifname lo accept
+    # icmp
+    # routers may also want: mld-listener-query, nd-router-solicit
+    icmpv6 type { echo-request, nd-neighbor-solicit } accept
+    # open tcp ports: sshd (22), etc.
+    tcp dport { ssh, 1234, 3333, 8080, 8096 } accept
+  }
+}
+|]
