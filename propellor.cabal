@@ -18,6 +18,8 @@ Extra-Source-Files:
   config-simple.hs
   config-freebsd.hs
   joeyconfig.hs
+  lib/I3.hs
+  lib/Nftables.hs
   lib/Quasiquote.hs
   config.hs
   contrib/post-merge-hook
@@ -239,8 +241,8 @@ Library
     System.Process.Concurrent
     Paths_propellor
 
-Library quasiquote
-  Exposed-Modules:     Quasiquote
+Library propellor-lib
+  Exposed-Modules:     I3,Nftables,Quasiquote
   Hs-Source-Dirs:      lib
   Build-Depends:       base, template-haskell
   Default-Language:    Haskell2010
@@ -251,7 +253,7 @@ Executable propellor-config
   Main-Is: propellor-config.hs
   GHC-Options: -threaded -Wall -fno-warn-tabs
   Default-Extensions: TypeOperators
-  Build-Depends: propellor, quasiquote, base
+  Build-Depends: propellor, propellor-lib, base
 
 Executable propellor
   Default-Language: Haskell2010

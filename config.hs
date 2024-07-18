@@ -1,20 +1,21 @@
 -- This is the main configuration file for Propellor, and is used to build
 -- the propellor program.
-{-# LANGUAGE QuasiQuotes #-}
 
 import Data.List
+-- import qualified Propellor.Property.Firewall as Firewall
+
+import I3 (i3Config, i3StatusConfig)
+import Nftables (nftRules)
 import Propellor
 import qualified Propellor.Property.Apt as Apt
 import qualified Propellor.Property.Cron as Cron
 import qualified Propellor.Property.File as File
--- import qualified Propellor.Property.Firewall as Firewall
 import qualified Propellor.Property.Fstab as Fstab
 import qualified Propellor.Property.Group as Group
 import qualified Propellor.Property.Ssh as Ssh
 import qualified Propellor.Property.Sudo as Sudo
 import qualified Propellor.Property.Systemd as Systemd
 import qualified Propellor.Property.User as User
-import Quasiquote (config)
 
 main :: IO ()
 main = defaultMain hosts
@@ -123,7 +124,7 @@ sapientia =
           -- "cbonsai",
           "ccache",
           -- "cdrkit",
-          "chromium",
+          -- "chromium", -- TODO enable on actual install
           "cifs-utils",
           -- "cmatrix",
           -- "compsize",
@@ -190,7 +191,7 @@ sapientia =
           "hlint",
           -- "html-tidy",
           "htop",
-          "thunderbird",
+          -- "thunderbird", -- TODO enable on actual install
           -- "hydra-check",
           "imagemagick",
           -- "inetutils",
@@ -217,7 +218,7 @@ sapientia =
           "ledger",
           "lftp",
           -- "librecad",
-          "libreoffice",
+          -- "libreoffice", -- TODO enable on actual install
           -- "librewolf",
           -- "libstemmer",
           -- "lm_sensors",
@@ -283,7 +284,7 @@ sapientia =
           -- "python310Packages.ipython ",
           -- "ranger",
           "translate-shell",
-          "rawtherapee",
+          -- "rawtherapee", -- TODO enable on actual install
           -- "rclone",
           "tree",
           "rename",
@@ -316,7 +317,7 @@ sapientia =
           "urlscan",
           "usbutils",
           "vim",
-          "virt-manager",
+          -- "virt-manager", -- TODO enable on actual install
           "vlc",
           "vym",
           -- "wasmer",
@@ -362,16 +363,18 @@ sapientia =
       & Group.hasUser (Group "libvirt") (User "mdo")
       & Group.hasUser (Group "kvm") (User "mdo")
       & Group.hasUser (Group "nix-users") (User "mdo")
+      -- Environment variables
+      -- TODO Set from private field(s)?
+      -- void $ setEnv "PATH" stdPATH True
+      -- Configuration files
       & File.dirExists "/home/mdo/.config"
       -- TODO i3/config and i3status/config ?
-      {-
       & File.dirExists "/home/mdo/.config/i3"
-      & File.dirExists "/home/mdo/.config/i3status"
       & "/home/mdo/.config/i3/config"
         `File.hasContent` lines i3Config
+      & File.dirExists "/home/mdo/.config/i3status"
       & "/home/mdo/.config/i3status/config"
         `File.hasContent` lines i3StatusConfig
-      -}
       & File.dirExists "/home/mdo/.config/nix"
       & "/home/mdo/.config/nix/nix.conf"
         `File.containsLines` [ "extra-experimental-features = nix-command",
@@ -411,7 +414,7 @@ sapientia =
     fSshdMatch inputLines =
       if alreadyPresent propellorMark inputLines
         then inputLines
-        else findAndAdd "PermitRootLogin" addedLines inputLines
+        else inputLines <> addedLines
       where
         addedLines =
           [ propellorMark,
@@ -425,57 +428,3 @@ sapientia =
         alreadyPresent :: String -> [File.Line] -> Bool
         alreadyPresent _ [] = False
         alreadyPresent mark lns = any (\l -> mark `isInfixOf` l) lns
-
-        -- TODO Commented out lines when an actual line is present.
-        findAndAdd :: String -> [File.Line] -> [File.Line] -> [File.Line]
-        findAndAdd _ _ [] = []
-        findAndAdd keyword addLines (l : ls)
-          | keyword `isInfixOf` l = l : addLines ++ ls
-          | otherwise = l : findAndAdd keyword addLines ls
-
-{-
- -- TODO Read this from a configuration file
-i3Config =
-  "TODO"
-
--- TODO Read this from a configuration file
-i3StatusConfig =
-  "TODO"
--}
-
--- TODO Read this from a configuration file
-nftRules :: String
-nftRules =
-  [config|#!/usr/sbin/nft -f
-
-table firewall {
-  chain incoming {
-    type filter hook input priority 0; policy drop;
-    # established/related connections
-    ct state established,related accept
-    # loopback interface
-    iifname lo accept
-    # icmp
-    icmp type echo-request accept
-    # open tcp ports: sshd (22), etc.
-    tcp dport { ssh, 1234, 3333, 8080, 8096 } accept
-  }
-}
-
-table ip6 firewall {
-  chain incoming {
-    type filter hook input priority 0; policy drop;
-    # established/related connections
-    ct state established,related accept
-    # invalid connections
-    ct state invalid drop
-    # loopback interface
-    iifname lo accept
-    # icmp
-    # routers may also want: mld-listener-query, nd-router-solicit
-    icmpv6 type { echo-request, nd-neighbor-solicit } accept
-    # open tcp ports: sshd (22), etc.
-    tcp dport { ssh, 1234, 3333, 8080, 8096 } accept
-  }
-}
-|]
