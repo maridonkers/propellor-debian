@@ -18,6 +18,7 @@ Extra-Source-Files:
   config-simple.hs
   config-freebsd.hs
   joeyconfig.hs
+  lib/Bashrc.hs
   lib/I3.hs
   lib/Nftables.hs
   lib/Quasiquote.hs
@@ -242,7 +243,7 @@ Library
     Paths_propellor
 
 Library propellor-lib
-  Exposed-Modules:     I3,Nftables,Quasiquote
+  Exposed-Modules:     Bashrc,I3,Nftables,Quasiquote
   Hs-Source-Dirs:      lib
   Build-Depends:       base, template-haskell
   Default-Language:    Haskell2010
@@ -253,7 +254,7 @@ Executable propellor-config
   Main-Is: propellor-config.hs
   GHC-Options: -threaded -Wall -fno-warn-tabs
   Default-Extensions: TypeOperators
-  Build-Depends: propellor, propellor-lib, base
+  Build-Depends: propellor, propellor-lib, base, containers (>= 0.5)
 
 Executable propellor
   Default-Language: Haskell2010
