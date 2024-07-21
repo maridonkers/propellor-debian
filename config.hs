@@ -45,7 +45,7 @@ sapientia =
       -- & Apt.stdSourcesList -- `onChange` Apt.upgrade
       & Grub.cmdline_Linux_default "i915.enable_psr=1" -- TODO What does this do?
         ! Grub.cmdline_Linux_default "quiet splash" -- TODO Does this work?
-      & Systemd.persistentJournal
+      & Systemd.persistentJournal -- TODO What does this do?
       & Apt.stdSourcesList
         `onChange` File.fileProperty "Add non-free-firmware" fAptSources "/etc/apt/sources.list"
       & Apt.update
@@ -220,7 +220,7 @@ sapientia =
           "lftp",
           -- "librecad",
           "libreoffice",
-          -- "librewolf",
+          -- "librewolf", -- TODO requires configuration of repository source
           -- "libstemmer",
           -- "lm_sensors",
           "lshw",
@@ -237,7 +237,7 @@ sapientia =
           "mpv",
           -- "mpvScripts.quality-menu",
           -- "mpvScripts.sponsorblock",
-          -- "musikcube",
+          -- "musikcube", -- TODO where to get this for Debian? https://github.com/clangen/musikcube/releases/download/3.0.4/musikcube_3.0.4_linux_x86_64.deb
           -- "mutt",
           "neofetch",
           -- "neovim",
@@ -387,10 +387,25 @@ sapientia =
         `File.hasContent` lines i3StatusConfig
       & File.dirExists "/home/mdo/.config/nix"
       & "/home/mdo/.config/nix/nix.conf"
-      `File.containsLines` [ "extra-experimental-features = nix-command",
-                             "extra-experimental-features = flakes"
-                           ]
+        `File.containsLines` [ "extra-experimental-features = nix-command",
+                               "extra-experimental-features = flakes"
+                             ]
       & File.ownerGroup "/home/mdo/.config/nix/nix.conf" (User "mdo") (Group "mdo")
+      -- Musikcube from downloaded archive
+      & check
+        (not <$> Apt.isInstalled "musikcube")
+        ( cmdProperty "wget" ["https://github.com/clangen/musikcube/releases/download/3.0.4/musikcube_3.0.4_linux_x86_64.deb", "-O", "/root/musikcube_3.0.4_linux_x86_64.deb"]
+            `assume` MadeChange
+            `describe` "Musikcube archive downloaded"
+        )
+      & check
+        (not <$> Apt.isInstalled "musikcube")
+        ( cmdProperty "dpkg" ["-i", "/root/musikcube_3.0.4_linux_x86_64.deb"]
+            `assume` MadeChange
+            `describe` "Musikcube installed"
+        )
+      -- TODO LibreWolf from their repository
+
       -- Timezone
       & "/etc/timezone"
         `File.hasContent` ["Europe/Amsterdam"]
@@ -412,8 +427,6 @@ sapientia =
         `onChange` Systemd.restarted "ssh"
       -- Public key
       & Ssh.authorizedKey (User "mdo") "ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAFmvV41MBn9RoSWkUFnID+XafA7KqOf2wQhQnET1evIdjo8AIaSV5tjZ0strLZ6NjWayOU1JgjFCXfRJn+qq12vqgGgOF0i/9+R7GXnHMAoSktQiWvKwEFXuxTKqWv9g/tjrqGuxWNIDrYP+VD83k8qfseaLIWvkxWUQD4Tp6V7eRbVCA== u0_a75@localhost"
-      -- TODO Does not compile? (too much memory usage)
-      -- & cmdProperty "apt-key" ["adv", "--keyserver", akiServer keyId, "--recv-keys", akiId keyId]
       -- TODO What is this for exactly?
       & Cron.runPropellor (Cron.Times "30 * * * *")
   where
