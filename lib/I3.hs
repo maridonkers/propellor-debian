@@ -71,7 +71,7 @@ floating_modifier $mod
 
 # start a terminal
 #bindsym $mod+Return exec i3-sensible-terminal
-bindsym $mod+Return exec alacritty
+bindsym $mod+Return exec xterm
 bindsym $mod+Ctrl+Return exec xterm -title "float term" 
 bindsym $mod+Shift+Return exec xterm -title "float ghci" -e "exec nix-shell -p ghc --command ghci"
 bindsym $mod+Ctrl+Shift+Return exec xterm -title "float python" -e "exec python"
@@ -202,11 +202,11 @@ bindsym $mod+Shift+Ctrl+End exec --no-startup-id xlock -mode blank -startCmd "sy
 
 # Convenience shortcuts
 bindsym $mod+e exec emacsclient -nc -a ""
-bindsym $mod+w exec chromium --new-window
+bindsym $mod+w exec librewolf --new-window
 
 # Browse URL from clipboard
 #bindsym $mod+u --release exec --no-startup-id chromium --new-window "$(xclip -o -selection clipboard)"
-bindsym $mod+u --release exec --no-startup-id chromium --new-window  "$(xsel)"
+bindsym $mod+u --release exec --no-startup-id librewolf --new-window  "$(xsel)"
 bindsym $mod+i --release exec --no-startup-id dillo  "$(xsel)"
 
 # Play video URL from clipboard
@@ -225,7 +225,7 @@ mode "$mode_launcher" {
     bindsym c exec chromium --new-window; mode "default"
     bindsym k exec keepassxc; mode "default"
     bindsym l exec libreoffice; mode "default"
-    bindsym m exec alacritty -title "float musikcube" -e "exec musikcube"; mode "default"
+    bindsym m exec xterm -title "float musikcube" -e "exec musikcube"; mode "default"
     bindsym n exec nyxt; mode "default"
     bindsym o exec tor-browser; mode "default"
     bindsym t exec thunderbird; mode "default"

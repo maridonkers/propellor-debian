@@ -134,6 +134,7 @@ fi
 [[ ":$PATH:" =~ ":~/.cargo/bin" ]] || PATH="$PATH:~/.cargo/bin"
 [[ ":$PATH:" =~ ":~/.cabal/bin" ]] || PATH="$PATH:~/.cabal/bin"
 [[ ":$PATH:" =~ ":~/go/bin" ]] || PATH="$PATH:~/go/bin"
+[[ ":$PATH:" =~ ":~/.nix-profile/bin" ]] || PATH="$PATH:~/.nix-profile/bin"
 
 export EDITOR="vi"
 export QT_LOGGING_RULES="*=false"
@@ -142,12 +143,13 @@ export FREETYPE_PROPERTIES="truetype:interpreter-version=38"
 export DISPLAY=":0"
 # export TERM="xterm-256color"              # getting proper colors
 
+# TODO What was this meant to do? Why switch off screen?
 # Determine if there's an HDMI monitor and switch off screen off if there is.
-xrandr --listactivemonitors --verbose|grep '^HDMI-[0-9] connected ' > /dev/null
-if [ $? -eq 0 ]
-then
-  xset s off -dpms
-fi
+# xrandr --listactivemonitors --verbose|grep '^HDMI-[0-9] connected ' > /dev/null
+# if [ $? -eq 0 ]
+# then
+#   xset s off -dpms
+# fi
 
 # Rust
 # https://internals.rust-lang.org/t/cargo-sparse-protocol-feedback-thread/18234
@@ -169,6 +171,7 @@ alias lcat="less -EX"
 alias bl="LESSOPEN='' less"  
 alias www="librewolf --new-window"
 alias http-server="python -m http.server"
+
 alias ls="ls --color=never"
 alias l="exa"
 alias ll="exa -l"
@@ -357,8 +360,14 @@ bashrcRoot =
 # alias cp='cp -i'
 # alias mv='mv -i'
 
-alias l='exa'
-alias ll='exa -l'
-alias lls='exa -ls modified'
-alias b='batcat -n'
+alias ls="ls --color=never"
+alias l="exa"
+alias ll="exa -l"
+alias lls="exa -ls modified"
+
+alias lsb="lsblk -o PATH,SIZE,FSTYPE,MOUNTPOINTS,UUID"
+
+alias tma="tmux attach-session -t"
+alias tmn="tmux new-session -s"
+alias tml="tmux list-sessions"
 |]
