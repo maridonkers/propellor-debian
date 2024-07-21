@@ -48,8 +48,6 @@ sapientia =
       & Systemd.persistentJournal -- TODO What does this do?
       & Apt.stdSourcesList
         `onChange` File.fileProperty "Add non-free-firmware" fAptSources "/etc/apt/sources.list"
-      & Apt.update
-      & Apt.upgrade
       -- & Apt.unattendedUpgrades -- TODO Is this useful?
       -- LibreWolf from their repository - https://librewolf.net/installation/debian
       {-
@@ -82,6 +80,9 @@ sapientia =
                             "Architectures: amd64",
                             "Signed-By: /usr/share/keyrings/librewolf.gpg"
                           ]
+      -- Update & upgrade
+      & Apt.update
+      & Apt.upgrade
       -- File systems for data partitions
       & "/etc/crypttab"
         `File.hasContent` ["cr-home UUID=75236c0e-cad4-43a7-986c-a5f82f68cf65 none luks"]
