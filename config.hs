@@ -51,6 +51,37 @@ sapientia =
       & Apt.update
       & Apt.upgrade
       -- & Apt.unattendedUpgrades -- TODO Is this useful?
+      -- LibreWolf from their repository - https://librewolf.net/installation/debian
+      {-
+      sudo apt update && sudo apt install -y wget gnupg lsb-release apt-transport-https ca-certificates
+
+      distro=$(if echo " una bookworm vanessa focal jammy bullseye vera uma " | grep -q " $(lsb_release -sc) "; then lsb_release -sc; else echo focal; fi)
+
+      wget -O- https://deb.librewolf.net/keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/librewolf.gpg
+
+      sudo tee /etc/apt/sources.list.d/librewolf.sources << EOF > /dev/null
+      Types: deb
+      URIs: https://deb.librewolf.net
+      Suites: $distro
+      Components: main
+      Architectures: amd64
+      Signed-By: /usr/share/keyrings/librewolf.gpg
+      EOF
+
+      sudo apt update
+
+      sudo apt install librewolf -y
+      -}
+      & Apt.installed ["lsb-release", "apt-transport-https", "ca-certificates", "wget"]
+      & File.checkOverwrite File.PreserveExisting "/usr/share/keyrings/librewolf.gpg" fLibrewolf
+      & "/etc/apt/sources.list.d/librewolf.sources"
+        `File.hasContent` [ "Types: deb",
+                            "URIs: https://deb.librewolf.net",
+                            "Suites: bookworm",
+                            "Components: main",
+                            "Architectures: amd64",
+                            "Signed-By: /usr/share/keyrings/librewolf.gpg"
+                          ]
       -- File systems for data partitions
       & "/etc/crypttab"
         `File.hasContent` ["cr-home UUID=75236c0e-cad4-43a7-986c-a5f82f68cf65 none luks"]
@@ -220,7 +251,7 @@ sapientia =
           "lftp",
           -- "librecad",
           "libreoffice",
-          -- "librewolf", -- TODO requires configuration of repository source
+          "librewolf",
           -- "libstemmer",
           -- "lm_sensors",
           "lshw",
@@ -325,7 +356,6 @@ sapientia =
           "wcalc",
           -- "weather",
           "wf-recorder",
-          "wget",
           -- "wirelesstools",
           "wmctrl",
           "wpasupplicant",
@@ -404,8 +434,6 @@ sapientia =
             `assume` MadeChange
             `describe` "Musikcube installed"
         )
-      -- TODO LibreWolf from their repository
-
       -- Timezone
       & "/etc/timezone"
         `File.hasContent` ["Europe/Amsterdam"]
@@ -458,3 +486,9 @@ sapientia =
         alreadyPresent :: String -> [File.Line] -> Bool
         alreadyPresent _ [] = False
         alreadyPresent mark lns = any (\l -> mark `isInfixOf` l) lns
+
+    -- fLibrewolf :: FilePath -> _
+    fLibrewolf p =
+      cmdProperty "wget" ["https://deb.librewolf.net/keyring.gpg", "-O-", "gpg", "--dearmor", "-o", p]
+        `assume` MadeChange
+        `describe` "Librewolf repository key downloaded"
