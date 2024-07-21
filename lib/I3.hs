@@ -195,10 +195,8 @@ bindsym $mod+Shift+0 move container to workspace number $ws10
 
 # Screen lock, suspend, hibernate controls
 #bindsym $mod+ exec 
-bindsym $mod+End exec --no-startup-id xlock -mode blank
-bindsym $mod+Shift+End exec --no-startup-id systemctl suspend
-bindsym $mod+Ctrl+End exec --no-startup-id xlock -mode blank -startCmd "systemctl suspend"
-bindsym $mod+Shift+Ctrl+End exec --no-startup-id xlock -mode blank -startCmd "systemctl hibernate"
+bindsym $mod+End exec --no-startup-id systemctl suspend -i
+bindsym $mod+Shift+Ctrl+End exec --no-startup-id systemctl hibernate
 
 # Convenience shortcuts
 bindsym $mod+e exec emacsclient -nc -a ""

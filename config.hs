@@ -488,8 +488,9 @@ sapientia =
         alreadyPresent _ [] = False
         alreadyPresent mark lns = any (\l -> mark `isInfixOf` l) lns
 
+    -- TODO Function type and verify that the piped wget-pgp command will work.
     -- fLibrewolf :: FilePath -> _
     fLibrewolf p =
       cmdProperty "wget" ["https://deb.librewolf.net/keyring.gpg", "-O-", "gpg", "--dearmor", "-o", p]
         `assume` MadeChange
-        `describe` "Librewolf repository key downloaded"
+        `describe` "Librewolf repository key downloaded and saved"
