@@ -195,7 +195,8 @@ bindsym $mod+Shift+0 move container to workspace number $ws10
 
 # Screen lock, suspend, hibernate controls
 #bindsym $mod+ exec 
-bindsym $mod+End exec --no-startup-id systemctl suspend -i
+bindsym $mod+End exec --no-startup-id i3lock
+bindsym $mod+Shift+End exec --no-startup-id systemctl suspend -i
 bindsym $mod+Shift+Ctrl+End exec --no-startup-id systemctl hibernate
 
 # Convenience shortcuts

@@ -118,14 +118,14 @@ xInitrc =
 
 #setxkbmap -rules evdev -model evdev -layout us -variant altgr-intl
 
-if [ -r .Xmodmap ]
+if [ -r ~/.Xmodmap ]
 then
-   xmodmap .Xmodmap
+   xmodmap ~/.Xmodmap
 fi
 
-if [ -r .Xresources ]
+if [ -r ~/.Xresources ]
 then
-   xrdb -merge .Xresources
+   xrdb -merge ~/.Xresources
 fi
 
 exec /etc/alternatives/x-window-manager
