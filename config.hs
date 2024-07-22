@@ -138,6 +138,7 @@ sapientia =
           -- "cdrkit",
           "chromium",
           "cifs-utils",
+          "clamav",
           -- "cmatrix",
           -- "compsize",
           "cowsay",
