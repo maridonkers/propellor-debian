@@ -424,7 +424,7 @@ sapientia =
       -- Public key
       & Ssh.authorizedKey (User "mdo") "ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAFmvV41MBn9RoSWkUFnID+XafA7KqOf2wQhQnET1evIdjo8AIaSV5tjZ0strLZ6NjWayOU1JgjFCXfRJn+qq12vqgGgOF0i/9+R7GXnHMAoSktQiWvKwEFXuxTKqWv9g/tjrqGuxWNIDrYP+VD83k8qfseaLIWvkxWUQD4Tp6V7eRbVCA== u0_a75@localhost"
       -- TODO What is this for exactly?
-      & Cron.runPropellor (Cron.Times "30 * * * *")
+      -- & Cron.runPropellor (Cron.Times "30 * * * *")
   where
     fAptSources :: [File.Line] -> [File.Line]
     fAptSources = map f
