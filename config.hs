@@ -46,9 +46,6 @@ sapientia =
       & Grub.cmdline_Linux_default "i915.enable_psr=1" -- TODO What does this do?
         ! Grub.cmdline_Linux_default "quiet splash" -- TODO Does this work?
       & Systemd.persistentJournal -- TODO What does this do?
-      & Apt.stdSourcesList
-        `onChange` File.fileProperty "Add non-free-firmware" fAptSources "/etc/apt/sources.list"
-      -- & Apt.unattendedUpgrades -- TODO Is this useful?
       -- LibreWolf from their repository - https://librewolf.net/installation/debian
       {-
       sudo apt update && sudo apt install -y wget gnupg lsb-release apt-transport-https ca-certificates
@@ -81,6 +78,9 @@ sapientia =
                             "Signed-By: /usr/share/keyrings/librewolf.gpg"
                           ]
       -- Update & upgrade
+      & Apt.stdSourcesList
+        `onChange` File.fileProperty "Add non-free-firmware" fAptSources "/etc/apt/sources.list"
+      -- & Apt.unattendedUpgrades -- TODO Is this useful?
       & Apt.update
       & Apt.upgrade
       -- File systems for data partitions
@@ -104,7 +104,7 @@ sapientia =
           "gpg",
           -- "guix", -- TODO fails with libssl3 dependency error
           "tmux",
-          "vim-nox", --TODO
+          "vim-nox",
           "pulseaudio",
           "xinit", --TODO
           "xterm",
@@ -121,7 +121,7 @@ sapientia =
           -- "ghc",
           -- "pkgs-unstable.pkg-config",
           -- "stack",
-          -- "vivaldi",
+          -- "vivaldi", -- TODO where to get for Debian?
           -- "vivaldi-ffmpeg-codecs",
           -- "wapm-cli",
           -- "wine",
@@ -147,7 +147,7 @@ sapientia =
           -- "binutils-unwrapped",
           -- "bottom",
           -- "boxes",
-          -- "brave",
+          -- "brave", -- TODO where to get for Debian?
           "brotli",
           "btrfs-heatmap",
           "btrfs-progs",
@@ -170,7 +170,7 @@ sapientia =
           "dict",
           -- "dig",
           -- "digikam",
-          -- "dillo",
+          -- "dillo", -- TODO where to get for Debian?
           "direnv",
           "dmidecode",
           "docker",
@@ -193,8 +193,8 @@ sapientia =
           "file",
           "filezilla",
           -- "fortune",
-          -- "freecad",
-          -- "freetube",
+          "freecad",
+          -- "freetube", -- TODO where to get for Debian?
           -- "freetype",
           "fzf",
           -- "gambit",
@@ -202,10 +202,9 @@ sapientia =
           "genisoimage",
           -- "gerbil",
           "gimp",
-          -- "git", -- already installed
           "git-crypt",
           "git-lfs",
-          -- "gitAndTools.gitRemoteGcrypt",
+          "git-remote-gcrypt",
           -- "gitAndTools.tig",
           -- "gnumake",
           "gnupg",
@@ -217,7 +216,8 @@ sapientia =
           "hcxtools",
           -- "hddtemp",
           -- "hdparm",
-          -- "heimdall-gui",
+          "heimdall-flash",
+          "heimdall-flash-frontend",
           "highlight",
           "hledger",
           "hledger-ui",
@@ -225,17 +225,16 @@ sapientia =
           -- "html-tidy",
           "htop",
           "thunderbird",
-          -- "hydra-check",
           "imagemagick",
           -- "inetutils",
           "iotop",
           -- "ipfs",
           -- "irccloud",
           "isync",
-          -- "jellycli",
+          -- "jellycli", -- TODO where to get Jellyfin for Debian?
           -- "jellyfin",
           -- "jellyfin-media-player",
-          -- "jp2a",
+          "jp2a",
           "jq",
           -- "jujutsu",
           -- "just",
@@ -269,8 +268,7 @@ sapientia =
           "mpv",
           -- "mpvScripts.quality-menu",
           -- "mpvScripts.sponsorblock",
-          -- "musikcube", -- TODO where to get this for Debian? https://github.com/clangen/musikcube/releases/download/3.0.4/musikcube_3.0.4_linux_x86_64.deb
-          -- "mutt",
+          "mutt",
           "neofetch",
           -- "neovim",
           -- "neovim-qt",
@@ -304,8 +302,7 @@ sapientia =
           -- "pcre",
           "emacs",
           -- "racket",
-          -- "plantuml-c4",
-          "plantuml",
+          "plantuml", -- "plantuml-c4"
           -- "pmutils",
           "poppler-utils",
           -- "procs",
@@ -345,6 +342,7 @@ sapientia =
           -- "subtitleeditor",
           -- "sutils",
           "sysstat",
+          "tig",
           -- "ums",
           "unzip",
           "urlscan",
@@ -362,19 +360,9 @@ sapientia =
           "wpasupplicant",
           -- "xclip",
           "xdotool",
-          -- "xlockmore",
           -- "xmobar",
           "x11-apps",
           "x11-utils",
-          -- "xorg.xdpyinfo",
-          -- "xorg.xev",
-          -- "xorg.xeyes",
-          -- "xorg.xhost",
-          -- "xorg.xinit",
-          -- "xorg.xkill",
-          -- "xorg.xmessage",
-          -- "xorg.xmodmap",
-          -- "xorg.xwininfo",
           "xsane",
           "xsel",
           -- "yara",
@@ -488,9 +476,8 @@ sapientia =
         alreadyPresent _ [] = False
         alreadyPresent mark lns = any (\l -> mark `isInfixOf` l) lns
 
-    -- TODO Function type and verify that the piped wget-pgp command will work.
-    -- fLibrewolf :: FilePath -> _
+    fLibrewolf :: FilePath -> Property UnixLike
     fLibrewolf p =
-      cmdProperty "wget" ["https://deb.librewolf.net/keyring.gpg", "-O-", "|", "gpg", "--dearmor", "-o", p]
+      scriptProperty ["wget https://deb.librewolf.net/keyring.gpg -O- | gpg --dearmor -o " <> p]
         `assume` MadeChange
         `describe` "Librewolf repository key downloaded and saved"
