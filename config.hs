@@ -20,7 +20,7 @@ import qualified Propellor.Property.Ssh as Ssh
 import qualified Propellor.Property.Sudo as Sudo
 import qualified Propellor.Property.Systemd as Systemd
 import qualified Propellor.Property.User as User
-import Xwindows (xInitrc, xResources)
+import Xwindows (xInitrc, xModmap, xResources)
 
 main :: IO ()
 main = defaultMain hosts
@@ -375,6 +375,8 @@ sapientia =
         `File.hasContent` lines bashrcMdo
       & "/home/mdo/.Xresources"
         `File.hasContent` lines xResources
+      & "/home/mdo/.Xmodmap"
+        `File.hasContent` lines xModmap
       & "/home/mdo/.xinitrc"
         `File.hasContent` lines xInitrc
       & File.dirExists "/home/mdo/.config"

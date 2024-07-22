@@ -1,7 +1,7 @@
 {-# LANGUAGE QuasiQuotes #-}
 
 -- Nftables.hs
-module Xwindows (xInitrc, xResources) where
+module Xwindows (xInitrc, xModmap, xResources) where
 
 import Quasiquote (config)
 
@@ -101,15 +101,32 @@ XTerm*charClass: 33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
 *.color15:    #E6E6E6
 |]
 
+xModmap :: String
+xModmap =
+  [config|! This file is under control of Propellor.
+
+! Remove shift lock functionality
+clear Lock
+
+! Shift + Caps_Lock is compose key
+keycode 66 = Caps_Lock Multi_key Caps_Lock
+|]
+
 xInitrc :: String
 xInitrc =
   [config|# This file is under control of Propellor.
 
-setxkbmap -rules evdev -model evdev -layout us -variant altgr-intl
+#setxkbmap -rules evdev -model evdev -layout us -variant altgr-intl
+
+if [ -r .Xmodmap ]
+then
+   xmodmap .Xmodmap
+fi
 
 if [ -r .Xresources ]
 then
    xrdb -merge .Xresources
 fi
+
 exec /etc/alternatives/x-window-manager
 |]
