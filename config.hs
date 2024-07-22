@@ -56,7 +56,7 @@ sapientia =
                             "Architectures: amd64",
                             "Signed-By: /usr/share/keyrings/librewolf.gpg"
                           ]
-      -- Update & upgrade
+      -- Configure standard sources; update & upgrade
       & Apt.stdSourcesList
         `onChange` File.fileProperty "Add non-free-firmware" fAptSources "/etc/apt/sources.list"
       -- & Apt.unattendedUpgrades -- TODO Is this useful?
@@ -70,7 +70,7 @@ sapientia =
         "/dev/mapper/cr-home"
         "/home"
         (Fstab.MountOpts ["noatime,space_cache"]) -- mempty
-        -- Install base packages (what remains with nix?)
+        -- Install base packages
       & Apt.installed
         [ "intel-microcode",
           "firmware-linux-free",
@@ -88,7 +88,6 @@ sapientia =
           "xinit", --TODO
           "xterm",
           "i3",
-          "nix-bin", -- TODO nix or guix?
           "fonts-hack",
           "fonts-firacode",
           "ormolu",
@@ -96,7 +95,6 @@ sapientia =
           "build-essential",
           -- "android-studio",
           -- "cabal-install",
-          -- "cabal2nix",
           -- "ghc",
           -- "pkgs-unstable.pkg-config",
           -- "stack",
@@ -253,8 +251,6 @@ sapientia =
           "neofetch",
           -- "neovim",
           -- "neovim-qt",
-          -- "nix-index",
-          -- "nix-prefetch-scripts",
           "nmap",
           -- "nomacs",
           "notmuch",
@@ -357,14 +353,13 @@ sapientia =
       & User.hasSomePassword (User "mdo")
       & User.accountFor (User "csp")
       & User.hasSomePassword (User "csp")
-      -- Sudo
-      & Sudo.enabledFor (User "mdo")
-      -- Nix
       & Group.hasUser (Group "docker") (User "mdo")
       & Group.hasUser (Group "libvirt") (User "mdo")
       & Group.hasUser (Group "kvm") (User "mdo")
       & Group.hasUser (Group "adm") (User "mdo")
       & Group.hasUser (Group "nix-users") (User "mdo")
+      -- Sudo
+      & Sudo.enabledFor (User "mdo")
       -- Secrets (to be included from ~/.bashrc files)
       & "/home/mdo/.bashrc_secrets"
         `File.hasPrivContentExposed` (Context "sapientia.mdo.bashrc.secrets")
