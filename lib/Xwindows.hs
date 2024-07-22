@@ -24,7 +24,7 @@ XTerm.termName: xterm-256color
 ! Xft.dpi: 96
 
 ! Default size of xterm.
-xterm*geometry: 94x28
+xterm*geometry: 80x24
 
 !Xcursor*theme: aero-large-drop
 !Xcursor*size: 48
@@ -47,21 +47,19 @@ Xft.autohint: true
 Xft.hintstyle: hintfull
 Xft.lcdfilter: lcdfilter
 
-XTerm*renderFont: true
+!XTerm*renderFont: true
 ! XTerm*faceName: xft:Mononoki Nerd Font, \
 !                 xft:JoyPixels:size=10, \
 !                 xft:Monospace:style=Medium:size=10
 ! XTerm*faceName: xft:Mononoki Nerd Font
 ! XTerm*faceName: xft:Jetbrains Mono
 
-XTerm*faceName: xft:JiraCode
+! TODO
+XTerm*renderFont: true
+XTerm*faceName: xft:Hack
 XTerm*faceSize: 12
 XTerm*utf8: 2
 XTerm*locale: true
-
-! TODO
-! https://askubuntu.com/questions/161652/how-to-change-the-default-font-size-of-xterm
-xterm*font:     *-fixed-*-*-*-18-*
 
 XTerm.vt100.translations: #override \n\
   Ctrl <Key> j: smaller-vt-font() \n\

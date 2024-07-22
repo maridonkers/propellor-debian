@@ -362,6 +362,7 @@ sapientia =
       & Group.hasUser (Group "docker") (User "mdo")
       & Group.hasUser (Group "libvirt") (User "mdo")
       & Group.hasUser (Group "kvm") (User "mdo")
+      & Group.hasUser (Group "adm") (User "mdo")
       & Group.hasUser (Group "nix-users") (User "mdo")
       -- Secrets (to be included from ~/.bashrc files)
       & "/home/mdo/.bashrc_secrets"
