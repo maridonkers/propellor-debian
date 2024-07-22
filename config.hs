@@ -3,7 +3,6 @@
 
 -- import qualified Propellor.Property.Firewall as Firewall
 -- import qualified Propellor.PrivData as PrivData
--- import Control.Monad.IO.Class (liftIO)
 
 import Bashrc (bashrcMdo, bashrcRoot)
 import Data.List
@@ -47,26 +46,6 @@ sapientia =
         ! Grub.cmdline_Linux_default "quiet splash" -- TODO Does this work?
       & Systemd.persistentJournal -- TODO What does this do?
       -- LibreWolf from their repository - https://librewolf.net/installation/debian
-      {-
-      sudo apt update && sudo apt install -y wget gnupg lsb-release apt-transport-https ca-certificates
-
-      distro=$(if echo " una bookworm vanessa focal jammy bullseye vera uma " | grep -q " $(lsb_release -sc) "; then lsb_release -sc; else echo focal; fi)
-
-      wget -O- https://deb.librewolf.net/keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/librewolf.gpg
-
-      sudo tee /etc/apt/sources.list.d/librewolf.sources << EOF > /dev/null
-      Types: deb
-      URIs: https://deb.librewolf.net
-      Suites: $distro
-      Components: main
-      Architectures: amd64
-      Signed-By: /usr/share/keyrings/librewolf.gpg
-      EOF
-
-      sudo apt update
-
-      sudo apt install librewolf -y
-      -}
       & Apt.installed ["lsb-release", "apt-transport-https", "ca-certificates", "wget"]
       & File.checkOverwrite File.PreserveExisting "/usr/share/keyrings/librewolf.gpg" fLibrewolf
       & "/etc/apt/sources.list.d/librewolf.sources"
@@ -224,6 +203,7 @@ sapientia =
           "hlint",
           -- "html-tidy",
           "htop",
+          "hugo",
           "thunderbird",
           "imagemagick",
           -- "inetutils",
