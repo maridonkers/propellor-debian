@@ -201,7 +201,7 @@ sapientia =
           "hledger",
           "hledger-ui",
           "hlint",
-          -- "html-tidy",
+          "tidy",
           "htop",
           "hugo",
           "thunderbird",
