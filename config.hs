@@ -1,6 +1,7 @@
 -- This is the main configuration file for Propellor, and is used to build
 -- the propellor program.
 
+-- import qualified Propellor.Property.Cron as Cron
 -- import qualified Propellor.Property.Firewall as Firewall
 -- import qualified Propellor.PrivData as PrivData
 
@@ -10,7 +11,6 @@ import I3 (i3Config, i3StatusConfig)
 import Nftables (nftRules)
 import Propellor
 import qualified Propellor.Property.Apt as Apt
-import qualified Propellor.Property.Cron as Cron
 import qualified Propellor.Property.File as File
 import qualified Propellor.Property.Fstab as Fstab
 import qualified Propellor.Property.Group as Group
@@ -20,6 +20,7 @@ import qualified Propellor.Property.Ssh as Ssh
 import qualified Propellor.Property.Sudo as Sudo
 import qualified Propellor.Property.Systemd as Systemd
 import qualified Propellor.Property.User as User
+import Tmux (tmuxMdo)
 import Xwindows (xInitrc, xModmap, xResources)
 
 main :: IO ()
@@ -89,7 +90,6 @@ sapientia =
           "xterm",
           "i3",
           "fonts-hack",
-          "fonts-firacode",
           "ormolu",
           "docker.io",
           "build-essential",
@@ -370,6 +370,8 @@ sapientia =
       & File.dirExists "/home/mdo"
       & "/home/mdo/.bashrc"
         `File.hasContent` lines bashrcMdo
+      & "/home/mdo/.tmux.conf"
+        `File.hasContent` lines tmuxMdo
       & "/home/mdo/.Xresources"
         `File.hasContent` lines xResources
       & "/home/mdo/.Xmodmap"
@@ -423,9 +425,10 @@ sapientia =
         `onChange` Systemd.restarted "ssh"
       -- Public key
       & Ssh.authorizedKey (User "mdo") "ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAFmvV41MBn9RoSWkUFnID+XafA7KqOf2wQhQnET1evIdjo8AIaSV5tjZ0strLZ6NjWayOU1JgjFCXfRJn+qq12vqgGgOF0i/9+R7GXnHMAoSktQiWvKwEFXuxTKqWv9g/tjrqGuxWNIDrYP+VD83k8qfseaLIWvkxWUQD4Tp6V7eRbVCA== u0_a75@localhost"
-      -- TODO What is this for exactly?
-      -- & Cron.runPropellor (Cron.Times "30 * * * *")
   where
+    -- TODO What is this for exactly?
+    -- & Cron.runPropellor (Cron.Times "30 * * * *")
+
     fAptSources :: [File.Line] -> [File.Line]
     fAptSources = map f
       where

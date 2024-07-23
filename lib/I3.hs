@@ -73,7 +73,7 @@ floating_modifier $mod
 #bindsym $mod+Return exec i3-sensible-terminal
 bindsym $mod+Return exec xterm
 bindsym $mod+Ctrl+Return exec xterm -title "float term" 
-bindsym $mod+Shift+Return exec xterm -title "float ghci" -e "exec nix-shell -p ghc --command ghci"
+bindsym $mod+Shift+Return exec xterm -title "float ghci" -e "exec ghci"
 bindsym $mod+Ctrl+Shift+Return exec xterm -title "float python" -e "exec python"
 
 # kill focused window
