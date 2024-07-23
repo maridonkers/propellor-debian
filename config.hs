@@ -229,6 +229,7 @@ sapientia =
           -- "lazygit",
           "ledger",
           "lftp",
+          "libpq-dev",
           -- "librecad",
           "libreoffice",
           "librewolf",
