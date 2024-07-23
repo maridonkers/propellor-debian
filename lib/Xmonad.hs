@@ -618,14 +618,15 @@ Config { font = "Noto Mono 10"
                       -- Disk read/write speed
                     , Run DiskIO [("sda", "sda:<read> <write>"), ("sdb", "sdb:<read> <write>")] [] 10
                       -- Runs a standard shell command 'uname -r' to get kernel version
-                    , Run Com "uname" ["-r"] "" 36000
+                    -- , Run Com "uname" ["-r"] "" 36000
                       -- Prints out the left side items such as workspaces, layout, etc.
                       -- The workspaces are 'clickable' in my configs.
                     , Run UnsafeStdinReader
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = " <fc=#666666>|</fc> %UnsafeStdinReader% }{ <fc=#FFB86C>%multicpu% </fc><fc=#666666>| </fc><fc=#FF5555>%memory% </fc><fc=#666666>| </fc><fc=#82AAFF>%disku% </fc><fc=#666666>| </fc><fc=#b3afc2>%uname% </fc><fc=#82AAFF>| </fc><fc=#8BE9FD>%date%</fc> "
+       -- , template = " <fc=#666666>|</fc> %UnsafeStdinReader% }{ <fc=#FFB86C>%multicpu% </fc><fc=#666666>| </fc><fc=#FF5555>%memory% </fc><fc=#666666>| </fc><fc=#82AAFF>%disku% </fc><fc=#666666>| </fc><fc=#b3afc2>%uname% </fc><fc=#82AAFF>| </fc><fc=#8BE9FD>%date%</fc> "
+       , template = " <fc=#666666>|</fc> %UnsafeStdinReader% }{ <fc=#FFB86C>%multicpu% </fc><fc=#666666>| </fc><fc=#FF5555>%memory% </fc><fc=#666666>| </fc><fc=#82AAFF>%disku% </fc><fc=#666666>| </fc><fc=#8BE9FD>%date%</fc> "
        }
 |]
 
