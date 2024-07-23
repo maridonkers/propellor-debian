@@ -201,6 +201,7 @@ sapientia =
           "hledger",
           "hledger-ui",
           "hlint",
+          "hplip",
           "tidy",
           "htop",
           "hugo",
