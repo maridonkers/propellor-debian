@@ -23,6 +23,7 @@ Extra-Source-Files:
   lib/Nftables.hs
   lib/Quasiquote.hs
   lib/Tmux.hs
+  lib/Xmonad.hs
   lib/Xwindows.hs
   config.hs
   contrib/post-merge-hook
@@ -245,7 +246,7 @@ Library
     Paths_propellor
 
 Library propellor-lib
-  Exposed-Modules:     Bashrc,I3,Nftables,Quasiquote,Tmux,Xwindows
+  Exposed-Modules:     Bashrc,I3,Nftables,Quasiquote,Tmux,Xmonad,Xwindows
   Hs-Source-Dirs:      lib
   Build-Depends:       base, template-haskell
   Default-Language:    Haskell2010

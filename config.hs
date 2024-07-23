@@ -21,6 +21,7 @@ import qualified Propellor.Property.Sudo as Sudo
 import qualified Propellor.Property.Systemd as Systemd
 import qualified Propellor.Property.User as User
 import Tmux (tmuxMdo)
+import Xmonad (xmobarRc0, xmobarRc1, xmonadMdo)
 import Xwindows (xInitrc, xModmap, xResources)
 
 main :: IO ()
@@ -385,6 +386,14 @@ sapientia =
       & File.dirExists "/home/mdo/.config/i3status"
       & "/home/mdo/.config/i3status/config"
         `File.hasContent` lines i3StatusConfig
+      & File.dirExists "/home/mdo/.xmonad"
+      & "/home/mdo/.xmonad/xmonad.hs"
+        `File.hasContent` lines xmonadMdo
+      & File.dirExists "/home/mdo/.config/xmobar"
+      & "/home/mdo/.config/xmobar/xmobarrc0"
+        `File.hasContent` lines xmobarRc0
+      & "/home/mdo/.config/xmobar/xmobarrc1"
+        `File.hasContent` lines xmobarRc1
       & File.dirExists "/home/mdo/.config/nix"
       & "/home/mdo/.config/nix/nix.conf"
         `File.containsLines` [ "extra-experimental-features = nix-command",
