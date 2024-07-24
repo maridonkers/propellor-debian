@@ -11,6 +11,7 @@ import I3 (i3Config, i3StatusConfig)
 import Nftables (nftRules)
 import Propellor
 import qualified Propellor.Property.Apt as Apt
+import qualified Propellor.Property.Docker as Docker
 import qualified Propellor.Property.File as File
 import qualified Propellor.Property.Fstab as Fstab
 import qualified Propellor.Property.Group as Group
@@ -72,7 +73,9 @@ sapientia =
         "/dev/mapper/cr-home"
         "/home"
         (Fstab.MountOpts ["noatime,space_cache"]) -- mempty
-        -- Install base packages
+        -- Docker
+      & Docker.installed
+      -- Install base packages
       & Apt.installed
         [ "aegisub",
           "android-file-transfer",
@@ -98,9 +101,7 @@ sapientia =
           "dict",
           "direnv",
           "dmidecode",
-          "docker",
           "docker-compose",
-          "docker.io",
           "dos2unix",
           "duperemove",
           "dvdbackup",
