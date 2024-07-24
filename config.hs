@@ -167,6 +167,8 @@ sapientia =
           "mpack",
           "mpv",
           "mutt",
+          "needrestart",
+          "needrestart-session",
           "neofetch",
           "nftables",
           "nmap",
