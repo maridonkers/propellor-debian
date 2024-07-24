@@ -413,8 +413,8 @@ keysAdditional =
       , ("M-S-<Pause>", spawn "systemctl suspend -i")
       , ("M-C-S-<Pause>", spawn "systemctl hibernate")
       , ("M-<Scroll_lock>", spawn myScreensaver)
-      , ("M-S-<Scroll_lock>", spawn "myScreensaver & systemctl suspend -i")
-      , ("M-C-S-<Scroll_lock>", spawn "myScreensaver & systemctl hibernate")
+      , ("M-S-<Scroll_lock>", spawn $ myScreensaver <> " & systemctl suspend -i")
+      , ("M-C-S-<Scroll_lock>", spawn $ myScreensaver <> " & systemctl hibernate")
       -- https://www.mankier.com/1/pactl
       , ("<XF86AudioLowerVolume>", spawn "pactl set-sink-volume @DEFAULT_SINK@ -5%")
       , ("<XF86AudioRaiseVolume>", spawn "pactl set-sink-volume @DEFAULT_SINK@ +5%")
