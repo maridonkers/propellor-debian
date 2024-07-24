@@ -319,6 +319,7 @@ sapientia =
           "sqlite3",
           "sshfs",
           -- "subdl",
+          "suckless-tools",
           -- "subtitleeditor",
           -- "sutils",
           "sysstat",

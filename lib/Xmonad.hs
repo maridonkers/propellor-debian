@@ -1,4 +1,5 @@
 {-# LANGUAGE QuasiQuotes #-}
+
 -- Xmonad.hs
 module Xmonad (xmonadMdo, xmobarRc0, xmobarRc1) where
 
@@ -236,8 +237,8 @@ myEnDw = "mpv https://www.youtube.com/watch?v=pqabxBKzZ6M&pp=ygUIZHcgbGl2ZSA%3D 
 -- myRedshiftOff :: String
 -- myRedshiftOff = "redshift ; redshift -x"
 
-myScreensaverOn :: String
-myScreensaverOn = "xlock -mode blank"
+myScreensaver :: String
+myScreensaver = "slock"
 
 myScreenBlank :: String
 myScreenBlank = "sleep 1; xset dpms force off"
@@ -408,11 +409,11 @@ keysAdditional =
       -- , ("M-l", spawn logCommand)
       -- , ("M-0", spawn "xscreensaver-command -lock")
       -- , ("M-C-0", spawn "xscreensaver-command -lock & systemctl suspend")
-      , ("<Scroll_lock>", spawn myScreensaverOn)
+      , ("<Scroll_lock>", spawn myScreensaver)
       , ("<Pause>", spawn myScreenBlank)
-      , ("M-<Pause>", spawn "systemctl suspend")
-      , ("M-<Scroll_lock>", spawn $ myScreensaverOn ++ " -startCmd \"systemctl suspend\"")
-      , ("M-C-<Scroll_lock>", spawn "systemctl hibernate")
+      , ("M-<Pause>", spawn "systemctl suspend -i")
+      , ("M-<Scroll_lock>", spawn "myScreensaver & systemctl suspend -i")
+      , ("M-C-<Scroll_lock>", spawn "myScreensaver & systemctl hibernate")
       -- https://www.mankier.com/1/pactl
       , ("<XF86AudioLowerVolume>", spawn "pactl set-sink-volume @DEFAULT_SINK@ -5%")
       , ("<XF86AudioRaiseVolume>", spawn "pactl set-sink-volume @DEFAULT_SINK@ +5%")
