@@ -59,6 +59,11 @@ sapientia =
                             "Architectures: amd64",
                             "Signed-By: /usr/share/keyrings/librewolf.gpg"
                           ]
+      -- Vivaldi from their repository - https://itsfoss.com/install-vivaldi-ubuntu-linux/
+      & File.checkOverwrite File.PreserveExisting "/usr/share/keyrings/vivaldi-browser.gpg" fVivaldi
+      & "/etc/apt/sources.list.d/vivaldi-archive.list"
+        `File.hasContent` [ "deb [signed-by=/usr/share/keyrings/vivaldi-browser.gpg arch=amd64] https://repo.vivaldi.com/archive/deb/ stable main"
+                          ]
       -- Jellycli pre-built binary from GitHub
       -- https://github.com/tryffel/jellycli
       & File.checkOverwrite File.PreserveExisting "/usr/local/bin/jellycli" fJellycli
@@ -149,7 +154,7 @@ sapientia =
           "gnupg",
           "gpg",
           "graphviz",
-          -- "guix", 
+          -- "guix",
           "handbrake",
           "hashcat",
           "hcxtools",
@@ -243,6 +248,7 @@ sapientia =
           "vim",
           "vim-nox",
           "virt-manager",
+          "vivaldi-stable",
           "vlc",
           "vym",
           "wcalc",
@@ -354,7 +360,6 @@ sapientia =
           -- "subtitleeditor",
           -- "sutils",
           -- "ums",
-          -- "vivaldi", -- TODO where to get for Debian?
           -- "vivaldi-ffmpeg-codecs",
           -- "wapm-cli",
           -- "wasmer",
@@ -363,7 +368,6 @@ sapientia =
           -- "winetricks",
           -- "wirelesstools",
           -- "xclip",
-          -- "xmobar",
           -- "yara",
           -- "zellij"
         ]
@@ -508,6 +512,12 @@ sapientia =
       scriptProperty ["wget https://deb.librewolf.net/keyring.gpg -O- | gpg --dearmor -o " <> p]
         `assume` MadeChange
         `describe` "Librewolf repository key downloaded and saved"
+
+    fVivaldi :: FilePath -> Property UnixLike
+    fVivaldi p =
+      scriptProperty ["wget https://repo.vivaldi.com/archive/linux_signing_key.pub -O- | gpg --dearmor -o " <> p]
+        `assume` MadeChange
+        `describe` "Vivaldi repository key downloaded and saved"
 
     -- TODO Yes, this needs to be manually changed when a new version is published...
     fJellycli :: FilePath -> Property UnixLike

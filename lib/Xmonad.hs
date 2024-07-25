@@ -158,7 +158,7 @@ myFloatingGHCI :: String
 myFloatingGHCI = "xterm -title \"floatterm\" -e \"exec ghci\""
 
 myFloatingPython :: String
-myFloatingPython = "xterm -title \"floatterm\" -e \"exec python\""
+myFloatingPython = "xterm -title \"floatterm\" -e \"exec python3\""
 
 myFileManager :: String
 myFileManager = "pcmanfm"
@@ -208,31 +208,8 @@ myNeedrestart = "needrestart-session"
 myTorBrowser :: String
 myTorBrowser = "tor-browser"
 
-myPtEuronews :: String
-myPtEuronews = "mpv https://www.youtube.com/watch?v=fLtn2L7OdeI&pp=ygUYZXVyb25ld3MgbGl2ZSBwb3J0dWd1ZXNl &"
-
-myEsDw :: String
-myEsDw = "mpv https://www.youtube.com/watch?v=tsStUN73_6I &"
-myEsRtve :: String
-myEsRtve = "mpv https://www.youtube.com/watch?v=mzdfGCdNSHQ &"
-myEsFrance24 :: String
-myEsFrance24 = "mpv https://www.youtube.com/live/Y-IlMeCCtIg &"
-myEsEuronews :: String
-myEsEuronews = "mpv https://www.youtube.com/watch?v=O9mOtdZ-nSk&pp=ygUVZXVyb25ld3MgbGl2ZSBzcGFuaXNo &"
-
-myFrFrance24 :: String
-myFrFrance24 = "mpv https://www.youtube.com/live/l8PMl7tUDIE &"
-myFrFranceinfo :: String
-myFrFranceinfo = "mpv https://www.youtube.com/watch?v=Z-Nwo-ypKtM &"
-myFrEuronews :: String
-myFrEuronews = "mpv https://www.youtube.com/watch?v=NiRIbKwAejk &"
-
-myEnFrance24 :: String
-myEnFrance24 = "mpv https://www.youtube.com/watch?v=h3MuIUNCCzI&pp=ygUPZnJhbmNlIDI0IGxpdmUg &"
-myEnEuronews :: String
-myEnEuronews = "mpv https://www.youtube.com/watch?v=pykpO5kQJ98&pp=ygUVZXVyb25ld3MgbGl2ZSBzcGFuaXNo &"
-myEnDw :: String
-myEnDw = "mpv https://www.youtube.com/watch?v=pqabxBKzZ6M&pp=ygUIZHcgbGl2ZSA%3D &"
+myKOReader :: String
+myKOReader = "koreader"
 
 -- myRedshiftOn :: String
 -- myRedshiftOn = "redshift"
@@ -356,17 +333,8 @@ keysAdditional =
       , ("M-/ t", spawn myThunderbird)
       , ("M-/ m", spawn myMusicPlayer)
       , ("M-/ o", spawn myTorBrowser)
-      , ("M-/ v p e", spawn myPtEuronews)
-      , ("M-/ v e 2", spawn myEsFrance24)
-      , ("M-/ v e d", spawn myEsDw)
-      , ("M-/ v e e", spawn myEsEuronews)
-      , ("M-/ v e r", spawn myEsRtve)
-      , ("M-/ v f 2", spawn myFrFrance24)
-      , ("M-/ v f e", spawn myFrEuronews)
-      , ("M-/ v f f", spawn myFrFranceinfo)
-      , ("M-/ v u 2", spawn myEnFrance24)
-      , ("M-/ v u d", spawn myEnDw)
-      , ("M-/ v u e", spawn myEnEuronews)
+      , ("M-/ r", spawn myKOReader)
+      , ("M-/ v", spawn myVivaldi)
       , ("M-/ w", spawn myLibreWolf)
       , ("M-/ y", spawn myYoutubeBrowser)
       , ("M-/ z", spawn myFilezilla)
@@ -430,9 +398,9 @@ keysAdditional =
       , ("M-<KP_Multiply>", spawn "pactl suspend-sink @DEFAULT_SINK@ false")
       , ("M-<KP_Enter>", spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
       , ("<XF86AudioMute>", spawn "amixer set Master toggle")
-      , ("<XF86AudioPlay>", spawn "clementine -t")
-      , ("<XF86AudioPrev>", spawn "clementine -r")
-      , ("<XF86AudioNext>", spawn "clementine -f")
+      -- , ("<XF86AudioPlay>", spawn "clementine -t")
+      -- , ("<XF86AudioPrev>", spawn "clementine -r")
+      -- , ("<XF86AudioNext>", spawn "clementine -f")
       -- https://github.com/benweitzman/BinarySpacePartition
       -- , ("M-M1-<Left>", sendMessage $ ExpandTowards L)
       , ("M-M1-C-<Left>", sendMessage $ ExpandTowards L)
