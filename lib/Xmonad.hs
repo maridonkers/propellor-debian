@@ -329,7 +329,7 @@ keysAdditional =
       , ("M-<Space>", sendMessage (Toggle "Full") >> sendMessage ToggleStruts)
       , ("M-<Esc>", withFocused toggleFloat)
       , ("M-d", spawn myScreendump)
-      , ("M-m", goToSelected def) --defaultGSConfig)
+      , ("M-0", goToSelected def) --defaultGSConfig)
       -- , ("M-w", withFocused minimizeWindow)
       -- , ("M-S-m", withLastMinimized maximizeWindowAndFocus)
       , ("M-<Backspace>", kill)
