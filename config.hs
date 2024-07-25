@@ -113,6 +113,7 @@ sapientia =
           "cryptsetup",
           "darcs",
           "dict",
+          "dillo",
           "direnv",
           "dmidecode",
           "docker-compose",
@@ -137,6 +138,7 @@ sapientia =
           "firmware-linux-nonfree",
           "firmware-misc-nonfree",
           "fonts-hack",
+          "fonts-noto-hinted",
           "freecad",
           "fzf",
           "genisoimage",
@@ -147,6 +149,7 @@ sapientia =
           "gnupg",
           "gpg",
           "graphviz",
+          -- "guix", 
           "handbrake",
           "hashcat",
           "hcxtools",
@@ -173,6 +176,7 @@ sapientia =
           "libpq-dev",
           "libreoffice",
           "librewolf",
+          "libsdl2-dev",
           "lshw",
           "lsof",
           "lsscsi",
@@ -186,6 +190,7 @@ sapientia =
           "needrestart",
           "needrestart-session",
           "neofetch",
+          -- "nix-bin",
           "nftables",
           "nmap",
           "notmuch",
@@ -279,7 +284,6 @@ sapientia =
           -- "ddrescue",
           -- "dig",
           -- "digikam",
-          -- "dillo", -- TODO where to get for Debian?
           -- "exliveMinimal",
           -- "eza",
           -- "fortune",
@@ -292,23 +296,19 @@ sapientia =
           -- "gitAndTools.tig",
           -- "gnumake",
           -- "go",
-          -- "guix", -- TODO fails with libssl3 dependency error
           -- "hashcat-utils",
           -- "hddtemp",
           -- "hdparm",
           -- "inetutils",
           -- "ipfs",
           -- "irccloud",
-          -- "jellyfin-media-player",
           -- "jujutsu",
           -- "just",
           -- "kate",
-          -- "kcalc",
           -- "kdenlive",
           -- "kdiff3",
           -- "killall",
           -- "kismet",
-          -- "koreader",
           -- "lazygit",
           -- "librecad",
           -- "libstemmer",
@@ -431,6 +431,23 @@ sapientia =
         ( cmdProperty "dpkg" ["-i", "/root/musikcube_3.0.4_linux_x86_64.deb"]
             `assume` MadeChange
             `describe` "Musikcube installed"
+        )
+      -- KOReader from downloaded archive latest working for Debian
+      -- https://github-wiki-see.page/m/koreader/koreader/wiki/Installation-on-desktop-Linux
+      -- TODO Fails executing after install because of dependencies (?)
+      & check
+        (not <$> Apt.isInstalled "koreader")
+        ( cmdProperty "wget" ["https://github.com/koreader/koreader/releases/download/v2024.04/koreader-2024.04-amd64.deb", "-O", "/root/koreader-2024.04-amd64.deb"]
+            `assume` MadeChange
+            `describe` "KOReader archive downloaded"
+        )
+      & check
+        (not <$> Apt.isInstalled "koreader")
+        ( cmdProperty
+            "dpkg"
+            ["-i", "/root/koreader-2024.04-amd64.deb"]
+            `assume` MadeChange
+            `describe` "KOReader installed"
         )
       -- Timezone
       & "/etc/timezone"
