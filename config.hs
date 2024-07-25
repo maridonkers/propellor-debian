@@ -59,6 +59,20 @@ sapientia =
                             "Architectures: amd64",
                             "Signed-By: /usr/share/keyrings/librewolf.gpg"
                           ]
+      -- Jellycli pre-built binary from GitHub
+      -- https://github.com/tryffel/jellycli
+      & File.checkOverwrite File.PreserveExisting "/usr/local/bin/jellycli" fJellycli
+      -- Jellyfin from their repository
+      -- https://linuxcapable.com/how-to-install-jellyfin-media-server-on-debian-linux/
+      & File.checkOverwrite File.PreserveExisting "/usr/share/keyrings/jellyfin.gpg" fJellyfin
+      & "/etc/apt/sources.list.d/jellyfin.sources"
+        `File.hasContent` [ "Types: deb",
+                            "URIs: https://repo.jellyfin.org/debian",
+                            "Suites: bookworm",
+                            "Components: main",
+                            "Architectures: amd64",
+                            "Signed-By: /usr/share/keyrings/jellyfin.gpg"
+                          ]
       -- Configure standard sources; update & upgrade
       & Apt.stdSourcesList
         `onChange` File.fileProperty "Add non-free-firmware" fAptSources "/etc/apt/sources.list"
@@ -150,6 +164,7 @@ sapientia =
           "intel-microcode",
           "iotop",
           "isync",
+          "jellyfin",
           "jp2a",
           "jq",
           "keepassxc",
@@ -284,8 +299,6 @@ sapientia =
           -- "inetutils",
           -- "ipfs",
           -- "irccloud",
-          -- "jellycli", -- TODO where to get Jellyfin for Debian?
-          -- "jellyfin",
           -- "jellyfin-media-player",
           -- "jujutsu",
           -- "just",
@@ -478,3 +491,16 @@ sapientia =
       scriptProperty ["wget https://deb.librewolf.net/keyring.gpg -O- | gpg --dearmor -o " <> p]
         `assume` MadeChange
         `describe` "Librewolf repository key downloaded and saved"
+
+    -- TODO Yes, this needs to be manually changed when a new version is published...
+    fJellycli :: FilePath -> Property UnixLike
+    fJellycli p =
+      scriptProperty ["wget https://github.com/tryffel/jellycli/releases/download/v0.9.1/jellycli_0.9.1_Linux_x86_64 -O " <> p]
+        `assume` MadeChange
+        `describe` "Jellycli binary downloaded and saved"
+
+    fJellyfin :: FilePath -> Property UnixLike
+    fJellyfin p =
+      scriptProperty ["wget https://repo.jellyfin.org/debian/jellyfin_team.gpg.key -O- | gpg --dearmor -o " <> p]
+        `assume` MadeChange
+        `describe` "Jellyfin repository key downloaded and saved"
