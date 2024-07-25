@@ -202,6 +202,9 @@ myYoutubeBrowser = "librewolf --new-window https://youtube.com"
 myFilezilla :: String
 myFilezilla = "filezilla"
 
+myNeedrestart :: String
+myNeedrestart = "needrestart-session"
+
 myTorBrowser :: String
 myTorBrowser = "tor-browser"
 
@@ -330,6 +333,7 @@ keysAdditional =
       , ("M-<Esc>", withFocused toggleFloat)
       , ("M-d", spawn myScreendump)
       , ("M-0", goToSelected def) --defaultGSConfig)
+      , ("M-n", spawn myNeedrestart)
       -- , ("M-w", withFocused minimizeWindow)
       -- , ("M-S-m", withLastMinimized maximizeWindowAndFocus)
       , ("M-<Backspace>", kill)
