@@ -181,9 +181,6 @@ myFirefox = "firefox"
 myOpera :: String
 myOpera = "opera"
 
-myNyxt :: String
-myNyxt = "nyxt"
-
 myChromium :: String
 myChromium = "chromium"
 

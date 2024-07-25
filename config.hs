@@ -1,10 +1,6 @@
 -- This is the main configuration file for Propellor, and is used to build
 -- the propellor program.
 
--- import qualified Propellor.Property.Cron as Cron
--- import qualified Propellor.Property.Firewall as Firewall
--- import qualified Propellor.PrivData as PrivData
-
 import Bashrc (bashrcMdo, bashrcRoot)
 import Data.List
 import I3 (i3Config, i3StatusConfig)
@@ -44,7 +40,6 @@ sapientia =
       & osDebian (Stable "bookworm") X86_64
       & Laptop.powertopAutoTuneOnBoot -- TODO What does this do?
       -- & Laptop.trimSSD -- TODO don't have SSDs
-      -- & Apt.stdSourcesList -- `onChange` Apt.upgrade
       & Grub.cmdline_Linux_default "i915.enable_psr=1" -- TODO What does this do?
         ! Grub.cmdline_Linux_default "quiet splash" -- TODO Does this work?
       & Systemd.persistentJournal -- TODO What does this do?
@@ -108,6 +103,7 @@ sapientia =
           "aria2",
           "ark",
           "ascii",
+          "awscli",
           "bat",
           "beep",
           "brave-browser",
@@ -276,16 +272,11 @@ sapientia =
           -- "aspellDicts.en-computers",
           -- "aspellDicts.en-science",
           -- "aspellDicts.nl",
-          -- "aws-sam-cli",
-          -- "awscli2",
           -- "bandwhich",
           -- "banner",
           -- "binutils-unwrapped",
           -- "bottom",
           -- "boxes",
-          -- "cabal-install",
-          -- "cachix",
-          -- "castnow",
           -- "cbonsai",
           -- "cdrkit",
           -- "cmatrix",
@@ -293,22 +284,15 @@ sapientia =
           -- "cpdump",
           -- "dbmate",
           -- "ddrescue",
-          -- "dig",
           -- "digikam",
           -- "exliveMinimal",
-          -- "eza",
           -- "fortune",
           -- "freetube", -- TODO where to get for Debian?
           -- "freetype",
           -- "gambit",
           -- "gcc_multi",
           -- "gerbil",
-          -- "ghc",
-          -- "gitAndTools.tig",
-          -- "gnumake",
-          -- "go",
           -- "hashcat-utils",
-          -- "hddtemp",
           -- "hdparm",
           -- "inetutils",
           -- "ipfs",
@@ -326,9 +310,6 @@ sapientia =
           -- "lm_sensors",
           -- "mdcat",
           -- "metasploit",
-          -- "microcodeIntel",
-          -- "mpvScripts.quality-menu",
-          -- "mpvScripts.sponsorblock",
           -- "neovim",
           -- "neovim-qt",
           -- "nomacs",
@@ -346,12 +327,9 @@ sapientia =
           -- "paperwork",
           -- "pavucontrol",
           -- "pcre",
-          -- "pkgs-unstable.pkg-config",
           -- "pmutils",
           -- "procs",
           -- "pstree",
-          -- "python3", -- already installed
-          -- "python310Packages.ipython ",
           -- "racket",
           -- "ranger",
           -- "rclone",
@@ -365,7 +343,6 @@ sapientia =
           -- "subtitleeditor",
           -- "sutils",
           -- "ums",
-          -- "vivaldi-ffmpeg-codecs",
           -- "wapm-cli",
           -- "wasmer",
           -- "weather",
@@ -443,7 +420,6 @@ sapientia =
         )
       -- KOReader from downloaded archive latest working for Debian
       -- https://github-wiki-see.page/m/koreader/koreader/wiki/Installation-on-desktop-Linux
-      -- TODO Fails executing after install because of dependencies (?)
       & check
         (not <$> Apt.isInstalled "koreader")
         ( cmdProperty "wget" ["https://github.com/koreader/koreader/releases/download/v2024.04/koreader-2024.04-amd64.deb", "-O", "/root/koreader-2024.04-amd64.deb"]
