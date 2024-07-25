@@ -191,7 +191,10 @@ myLibreWolf :: String
 myLibreWolf = "librewolf"
 
 myBrave :: String
-myBrave = "brave"
+myBrave = "brave-browser"
+
+myDillo :: String
+myDillo = "dillo"
 
 myVivaldi :: String
 myVivaldi = "vivaldi"
@@ -324,6 +327,7 @@ keysAdditional =
       , ("M-y", mpvYTPrompt "mpv")
       , ("M-/ b", spawn myBrave)
       , ("M-/ c", spawn myChromium)
+      , ("M-/ d", spawn myDillo)
       , ("M-/ e", spawn myEditor)
       , ("M-/ f", spawn myFileManager)
       , ("M-/ h", spawn myFloatingGHCI)

@@ -64,6 +64,11 @@ sapientia =
       & "/etc/apt/sources.list.d/vivaldi-archive.list"
         `File.hasContent` [ "deb [signed-by=/usr/share/keyrings/vivaldi-browser.gpg arch=amd64] https://repo.vivaldi.com/archive/deb/ stable main"
                           ]
+      -- Brave from their repository - https://brave.com/linux/
+      & File.checkOverwrite File.PreserveExisting "/usr/share/keyrings/brave-browser-archive-keyring.gpg" fBrave
+      & "/etc/apt/sources.list.d/brave-browser-release.list"
+        `File.hasContent` [ "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"
+                          ]
       -- Jellycli pre-built binary from GitHub
       -- https://github.com/tryffel/jellycli
       & File.checkOverwrite File.PreserveExisting "/usr/local/bin/jellycli" fJellycli
@@ -105,6 +110,7 @@ sapientia =
           "ascii",
           "bat",
           "beep",
+          "brave-browser",
           "brotli",
           "btrfs-heatmap",
           "btrfs-progs",
@@ -277,7 +283,6 @@ sapientia =
           -- "binutils-unwrapped",
           -- "bottom",
           -- "boxes",
-          -- "brave", -- TODO where to get for Debian?
           -- "cabal-install",
           -- "cachix",
           -- "castnow",
@@ -518,6 +523,12 @@ sapientia =
       scriptProperty ["wget https://repo.vivaldi.com/archive/linux_signing_key.pub -O- | gpg --dearmor -o " <> p]
         `assume` MadeChange
         `describe` "Vivaldi repository key downloaded and saved"
+
+    fBrave :: FilePath -> Property UnixLike
+    fBrave p =
+      scriptProperty ["wget https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg -O- | gpg --dearmor -o " <> p]
+        `assume` MadeChange
+        `describe` "Brave repository key downloaded and saved"
 
     -- TODO Yes, this needs to be manually changed when a new version is published...
     fJellycli :: FilePath -> Property UnixLike
