@@ -157,7 +157,6 @@ sapientia =
           "gpg",
           "graphviz",
           -- "guix",
-          "handbrake",
           "hashcat",
           "hcxtools",
           "heimdall-flash",
@@ -223,7 +222,6 @@ sapientia =
           "ripgrep",
           "rmlint",
           "rsync",
-          "sabnzbdplus",
           "safecopy",
           "screen",
           "scrot",
@@ -243,6 +241,7 @@ sapientia =
           "tig",
           "tmux",
           "translate-shell",
+          "handbrake-cli",
           "tree",
           "unzip",
           "urlscan",
@@ -353,7 +352,8 @@ sapientia =
           -- "zellij"
         ]
       & Apt.backportInstalled
-        [ "yt-dlp"
+        [ "sabnzbdplus",
+          "yt-dlp"
         ]
       -- Users and groups
       & User.hasSomePassword (User "root")
