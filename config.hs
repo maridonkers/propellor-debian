@@ -264,7 +264,6 @@ sapientia =
           "xsane",
           "xsel",
           "xterm",
-          "yt-dlp",
           "zathura"
           -- "android-studio",
           -- "appimage-run",
@@ -352,6 +351,9 @@ sapientia =
           -- "xclip",
           -- "yara",
           -- "zellij"
+        ]
+      & Apt.backportInstalled
+        [ "yt-dlp"
         ]
       -- Users and groups
       & User.hasSomePassword (User "root")
