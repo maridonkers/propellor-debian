@@ -307,7 +307,7 @@ alias nix-env="PAGER= nix-env"
 alias pt-euronews="mpv https://www.youtube.com/watch?v=fLtn2L7OdeI&pp=ygUYZXVyb25ld3MgbGl2ZSBwb3J0dWd1ZXNl &"
 
 alias es-dw="mpv https://www.youtube.com/watch?v=tsStUN73_6I &"
-alias es-rtve="mpv https://www.youtube.com/watch?v=VXyvsXirb7I &"
+alias es-rtve="mpv https://www.youtube.com/watch?v=sRbziMycf4g &"
 alias es-france24="mpv https://www.youtube.com/live/Y-IlMeCCtIg &"
 alias es-euronews="mpv https://www.youtube.com/watch?v=O9mOtdZ-nSk&pp=ygUVZXVyb25ld3MgbGl2ZSBzcGFuaXNo &"
 
