@@ -116,8 +116,6 @@ sapientia =
           "chromium",
           "cifs-utils",
           "clamav",
-          "cockpit",
-          "cockpit-podman",
           "cowsay",
           "cryptsetup",
           "darcs",
@@ -218,9 +216,6 @@ sapientia =
           "pciutils",
           "pcmanfm",
           "plantuml", -- "plantuml-c4"
-          "podman",
-          "podman-compose",
-          "podman-docker",
           "poppler-utils",
           "psensor",
           "psmisc",
