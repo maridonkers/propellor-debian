@@ -201,8 +201,10 @@ sapientia =
           "needrestart",
           "needrestart-session",
           "neofetch",
-          -- "nix-bin",
+          "net-tools",
+          "network-manager",
           "nftables",
+          -- "nix-bin",
           "nmap",
           "notmuch",
           "offlineimap",
@@ -224,6 +226,7 @@ sapientia =
           "rawtherapee",
           "rename",
           "restic",
+          "rfkill",
           "ripgrep",
           "rmlint",
           "rsync",
@@ -236,6 +239,7 @@ sapientia =
           "smem",
           "smemstat",
           "socat",
+          "speedtest-cli",
           "sqlite3",
           "ssh",
           "sshfs",
@@ -369,6 +373,7 @@ sapientia =
       & Group.hasUser (Group "libvirt") (User "mdo")
       & Group.hasUser (Group "kvm") (User "mdo")
       & Group.hasUser (Group "adm") (User "mdo")
+      -- Use with lix — https://git.lix.systems/lix-project/lix
       & Group.hasUser (Group "nix-users") (User "mdo")
       -- Sudo
       & Sudo.enabledFor (User "mdo")
