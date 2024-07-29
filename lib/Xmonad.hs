@@ -508,7 +508,7 @@ main = do
                   ppVisible = xmobarColor "#c3e88d" "", -- Visible but not current workspace
                   ppHidden = xmobarColor "#82AAFF" "" . wrap "*" "", -- Hidden workspaces in xmobar
                   ppHiddenNoWindows = xmobarColor "#b3afc2" "", -- Hidden workspaces (no windows)
-                  ppTitle = xmobarColor "#ffffff" "" . shorten 50, -- Title of active window in xmobar
+                  ppTitle = xmobarColor "#ffffff" "" . shorten 20, -- Title of active window in xmobar
                   ppSep = "<fc=#666666> | </fc>", -- Separators in xmobar
                   ppUrgent = xmobarColor "#C45500" "" . wrap "!" "!", -- Urgent workspace
                   ppExtras = [windowCount], -- # of windows current workspace
