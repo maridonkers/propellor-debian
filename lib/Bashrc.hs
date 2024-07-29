@@ -306,21 +306,18 @@ function dccp() {
 alias nixsearch="nix search nixpkgs"
 alias nix-env="PAGER= nix-env"
 
-alias pt-euronews="mpv https://www.youtube.com/watch?v=fLtn2L7OdeI&pp=ygUYZXVyb25ld3MgbGl2ZSBwb3J0dWd1ZXNl &"
-
-alias es-dw="mpv https://www.youtube.com/watch?v=tsStUN73_6I &"
+alias es-dw="mpv https://www.youtube.com/watch?v=Io5mt83nCcU &"
 # TODO WHAT HAVE THEY DONE? alias es-rtve="mpv https://www.youtube.com/watch?v=sRbziMycf4g &"
 alias es-france24="mpv https://www.youtube.com/live/Y-IlMeCCtIg &"
-alias es-euronews="mpv https://www.youtube.com/watch?v=O9mOtdZ-nSk&pp=ygUVZXVyb25ld3MgbGl2ZSBzcGFuaXNo &"
+alias es-euronews="mpv https://www.youtube.com/watch?v=O9mOtdZ-nSk &"
 
 alias fr-france24="mpv https://www.youtube.com/live/l8PMl7tUDIE &"
 alias fr-franceinfo="mpv https://www.youtube.com/watch?v=Z-Nwo-ypKtM &"
 alias fr-euronews="mpv https://www.youtube.com/watch?v=NiRIbKwAejk &"
-alias fr-cgtn="mpv https://www.youtube.com/live/DxhwEQjegYw &"
 
-alias en-france24="mpv https://www.youtube.com/watch?v=h3MuIUNCCzI&pp=ygUPZnJhbmNlIDI0IGxpdmUg &"
-alias en-euronews="mpv https://www.youtube.com/watch?v=pykpO5kQJ98&pp=ygUVZXVyb25ld3MgbGl2ZSBzcGFuaXNo &"
-alias en-dw="mpv https://www.youtube.com/watch?v=pqabxBKzZ6M&pp=ygUIZHcgbGl2ZSA%3D &"
+alias en-france24="mpv https://www.youtube.com/watch?v=Ap-UM1O9RBU &"
+alias en-euronews="mpv https://www.youtube.com/watch?v=pykpO5kQJ98 &"
+alias en-dw="mpv https://www.youtube.com/watch?v=tZT2MCYu6Zw &"
 
 export LESSOPEN="| highlight --out-format=xterm256 --style=clarity %s"
 export LESS=' -R '
