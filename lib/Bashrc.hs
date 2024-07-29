@@ -286,6 +286,8 @@ alias lsblks="lsblk -o +FSSIZE,FSAVAIL,PTTYPE,HOTPLUG,UUID"
 
 alias eip4="dig +short myip.opendns.com @resolver1.opendns.com"
 
+alias security="lynx https://www.debian.org/security/"
+
 function mpv-dvd() {
     mpv dvd://$1 --dvd-device="$2"
 }

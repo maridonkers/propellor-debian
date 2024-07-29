@@ -99,6 +99,7 @@ sapientia =
         [ "aegisub",
           "android-file-transfer",
           "apktool",
+          "apt-listbugs",
           "arandr",
           "aria2",
           "ark",
