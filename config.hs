@@ -419,10 +419,12 @@ sapientia =
                                "extra-experimental-features = flakes"
                              ]
       & File.ownerGroup "/home/mdo/.config/nix/nix.conf" (User "mdo") (Group "mdo")
+      -- TODO Get latest release as documented here: https://docs.github.com/en/repositories/releasing-projects-on-github/linking-to-releases
       -- Musikcube from downloaded archive
+      -- TODO Determine asset name for latest release by reading HTML or perhaps get tag? Also checking if already installed does not really suffice (compare installed version against potential newer version?)
       & check
         (not <$> Apt.isInstalled "musikcube")
-        ( cmdProperty "wget" ["https://github.com/clangen/musikcube/releases/download/3.0.4/musikcube_3.0.4_linux_x86_64.deb", "-O", "/root/musikcube_3.0.4_linux_x86_64.deb"]
+        ( cmdProperty "wget" ["https://github.com/clangen/musikcube/releases/latest/musikcube_3.0.4_linux_x86_64.deb", "-O", "/root/musikcube_3.0.4_linux_x86_64.deb"]
             `assume` MadeChange
             `describe` "Musikcube archive downloaded"
         )
