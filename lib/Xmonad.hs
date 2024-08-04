@@ -217,6 +217,9 @@ myYoutubeBrowser = "librewolf --new-window https://youtube.com"
 myFilezilla :: String
 myFilezilla = "filezilla"
 
+myXmodmap :: String
+myXmodmap = "xmodmap ~/.Xmodmap"
+
 myNeedrestart :: String
 myNeedrestart = "needrestart-session"
 
@@ -376,8 +379,9 @@ keysAdditional =
     ("M-S-<Down>", windows W.swapUp),
     ("M-<Left>", windows W.focusUp),
     ("M-<Right>", windows W.focusDown),
-    ("M-z", windows W.focusUp),
-    ("M-x", windows W.focusDown),
+    -- ("M-z", windows W.focusUp),
+    -- ("M-x", windows W.focusDown),
+    ("M-x", spawn myXmodmap),
     ("M-C-<Down>", windows W.swapDown >> windows W.focusUp),
     ("M-C-<Up>", windows W.swapUp >> windows W.focusDown),
     ("M-<Up>", rotSlavesDown),

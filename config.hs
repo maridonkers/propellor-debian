@@ -423,6 +423,7 @@ sapientia =
       -- TODO Get latest release as documented here: https://docs.github.com/en/repositories/releasing-projects-on-github/linking-to-releases
       -- Musikcube from downloaded archive
       -- TODO Determine asset name for latest release by reading HTML or perhaps get tag? Also checking if already installed does not really suffice (compare installed version against potential newer version?)
+      -- https://hackage.haskell.org/package/req-3.2.0/docs/Network-HTTP-Req.html
       & check
         (not <$> Apt.isInstalled "musikcube")
         ( cmdProperty "wget" ["https://github.com/clangen/musikcube/releases/latest/musikcube_3.0.4_linux_x86_64.deb", "-O", "/root/musikcube_3.0.4_linux_x86_64.deb"]
