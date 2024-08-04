@@ -241,6 +241,7 @@ sapientia =
           "smartmontools",
           "smem",
           "smemstat",
+          "snapd",
           "socat",
           "speedtest-cli",
           "sqlite3",
