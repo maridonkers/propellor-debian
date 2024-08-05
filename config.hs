@@ -123,7 +123,6 @@ sapientia =
           "ddrescueview",
           "ddrutility",
           "dict",
-          "dillo",
           "direnv",
           "dmidecode",
           "docker-compose",
