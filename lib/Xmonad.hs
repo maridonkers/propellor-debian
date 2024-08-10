@@ -1,6 +1,5 @@
 {-# LANGUAGE QuasiQuotes #-}
 
--- Xmonad.hs
 module Xmonad (xmonadMdo, xmobarRc0, xmobarRc1) where
 
 import Quasiquote (config)
@@ -316,6 +315,7 @@ mpvPrompt _ = do
   where
     cfg = myXPConfig {defaultText = ""}
 
+{-
 mpvYTPrompt :: String -> X ()
 mpvYTPrompt _ = do
   str <- inputPrompt cfg "Path|URL"
@@ -324,7 +324,17 @@ mpvYTPrompt _ = do
     Nothing -> pure ()
   where
     cfg = myXPConfig {defaultText = ""}
+-}
 
+vlcPrompt :: String -> X ()
+vlcPrompt _ = do
+  str <- inputPrompt cfg "Path|URL"
+  case str of
+    Just s -> spawn $ printf "yt-dlp \"%s\" -o - | vlc -" s
+    Nothing -> pure ()
+  where
+    cfg = myXPConfig {defaultText = ""}
+    
 ------------------------------------------------------------------------
 -- KEY BINDINGS
 ------------------------------------------------------------------------
@@ -349,8 +359,8 @@ keysAdditional =
     ("M-e", spawn myEditor),
     ("M-w", spawn myLibreWolf),
     ("M-u", webPrompt "librewolf"),
-    ("M-v", mpvPrompt "mpv"),
-    ("M-y", mpvYTPrompt "mpv"),
+    ("M-v", vlcPrompt "vlc"),
+    ("M-y", mpvPrompt "mpv"),
     ("M-/ b", spawn myBrave),
     ("M-/ c", spawn myChromium),
     ("M-/ d", spawn myDillo),
@@ -685,13 +695,14 @@ Config
           600,
         -- , Run DiskIO [("sda", "sda:<read> <write>"), ("sdb", "sdb:<read> <write>")] [] 10
         -- Runs a standard shell command 'uname -r' to get kernel version
-        Run Com "uname" ["-r"] "" 36000,
+        -- Run Com "uname" ["-r"] "" 36000,
         -- Prints out the left side items such as workspaces, layout, etc.
         -- The workspaces are 'clickable' in my configs.
         Run UnsafeStdinReader
       ],
     sepChar = "%",
     alignSep = "}{",
-    template = " <fc=#666666>|</fc> %UnsafeStdinReader% }{ <fc=#666666>| </fc><fc=#FFB86C>%multicpu% </fc><fc=#666666>| </fc><fc=#FF5555>%memory% </fc><fc=#666666>| </fc><fc=#82AAFF>%disku% </fc><fc=#666666>| </fc><fc=#b3afc2>%uname% </fc><fc=#82AAFF>| </fc><fc=#8BE9FD>%date%</fc> "
+    -- template = " <fc=#666666>|</fc> %UnsafeStdinReader% }{ <fc=#666666>| </fc><fc=#FFB86C>%multicpu% </fc><fc=#666666>| </fc><fc=#FF5555>%memory% </fc><fc=#666666>| </fc><fc=#82AAFF>%disku% </fc><fc=#666666>| </fc><fc=#b3afc2>%uname% </fc><fc=#82AAFF>| </fc><fc=#8BE9FD>%date%</fc> "
+    template = " <fc=#666666>|</fc> %UnsafeStdinReader% }{ <fc=#666666>| </fc><fc=#FFB86C>%multicpu% </fc><fc=#666666>| </fc><fc=#FF5555>%memory% </fc><fc=#666666>| </fc><fc=#82AAFF>%disku% </fc><fc=#82AAFF>| </fc><fc=#8BE9FD>%date%</fc> "
   }
 |]

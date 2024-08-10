@@ -1,5 +1,5 @@
 {-# LANGUAGE QuasiQuotes #-}
--- Nftables.hs
+
 module I3 (i3Config, i3StatusConfig) where
 
 import Quasiquote (config)

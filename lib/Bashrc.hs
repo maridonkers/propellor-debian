@@ -1,5 +1,5 @@
 {-# LANGUAGE QuasiQuotes #-}
--- Bashrc.hs
+
 module Bashrc (bashrcMdo, bashrcRoot) where
 
 import Quasiquote (config)

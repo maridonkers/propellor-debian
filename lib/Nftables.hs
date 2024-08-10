@@ -1,5 +1,5 @@
 {-# LANGUAGE QuasiQuotes #-}
--- Nftables.hs
+
 module Nftables (nftRules) where
 
 import Quasiquote (config)

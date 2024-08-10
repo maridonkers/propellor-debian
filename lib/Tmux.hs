@@ -1,5 +1,5 @@
 {-# LANGUAGE QuasiQuotes #-}
--- Tmux.hs
+
 module Tmux (tmuxMdo) where
 
 import Quasiquote (config)

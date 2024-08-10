@@ -1,6 +1,5 @@
 {-# LANGUAGE QuasiQuotes #-}
 
--- Nftables.hs
 module Xwindows (xInitrc, xModmap, xResources) where
 
 import Quasiquote (config)
