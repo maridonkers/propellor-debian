@@ -109,6 +109,7 @@ sapientia =
           "beep",
           "brave-browser",
           "brotli",
+          "btrfsmaintenance",
           "btrfs-heatmap",
           "btrfs-progs",
           "build-essential",
