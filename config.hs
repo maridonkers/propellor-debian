@@ -426,7 +426,8 @@ sapientia =
       -- https://hackage.haskell.org/package/req-3.2.0/docs/Network-HTTP-Req.html
       & check
         (not <$> Apt.isInstalled "musikcube")
-        ( cmdProperty "wget" ["https://github.com/clangen/musikcube/releases/latest/musikcube_3.0.4_linux_x86_64.deb", "-O", "/root/musikcube_3.0.4_linux_x86_64.deb"]
+        -- Via: https://github.com/clangen/musikcube/releases/latest/musikcube_3.0.4_linux_x86_64.deb"
+        ( cmdProperty "wget" ["https://github.com/clangen/musikcube/releases/download/3.0.4/musikcube_3.0.4_linux_x86_64.deb", "-O", "/root/musikcube_3.0.4_linux_x86_64.deb"]
             `assume` MadeChange
             `describe` "Musikcube archive downloaded"
         )
