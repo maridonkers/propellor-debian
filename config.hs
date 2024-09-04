@@ -96,8 +96,7 @@ sapientia =
       & Docker.installed
       -- Install base packages
       & Apt.installed
-        [ "aegisub",
-          "android-file-transfer",
+        [ "android-file-transfer",
           "apktool",
           "apt-listbugs",
           "arandr",
@@ -250,6 +249,7 @@ sapientia =
           "sqlite3",
           "ssh",
           "sshfs",
+          "subtitlecomposer",
           "suckless-tools",
           "sysstat",
           "thunderbird",
