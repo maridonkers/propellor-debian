@@ -229,6 +229,7 @@ sapientia =
           "pulseaudio",
           "pulsemixer",
           "pv",
+          "python3-pip",
           "rawtherapee",
           "rename",
           "restic",

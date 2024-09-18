@@ -307,17 +307,17 @@ alias nixsearch="nix search nixpkgs"
 alias nix-env="PAGER= nix-env"
 
 alias es-dw="mpv https://www.youtube.com/watch?v=Io5mt83nCcU &"
-alias es-rtve="mpv https://www.youtube.com/watch?v=y3-l3m4MeU8 &"
-alias es-france24="mpv https://www.youtube.com/live/Y-IlMeCCtIg &"
 alias es-euronews="mpv https://www.youtube.com/watch?v=O9mOtdZ-nSk &"
+alias es-france24="mpv https://www.youtube.com/live/Y-IlMeCCtIg &"
+alias es-rtve="mpv https://www.youtube.com/watch?v=y3-l3m4MeU8 &"
 
+alias fr-euronews="mpv https://www.youtube.com/watch?v=NiRIbKwAejk &"
 alias fr-france24="mpv https://www.youtube.com/live/l8PMl7tUDIE &"
 alias fr-franceinfo="mpv https://www.youtube.com/watch?v=Z-Nwo-ypKtM &"
-alias fr-euronews="mpv https://www.youtube.com/watch?v=NiRIbKwAejk &"
 
-alias en-france24="mpv https://www.youtube.com/watch?v=Ap-UM1O9RBU &"
-alias en-euronews="mpv https://www.youtube.com/watch?v=pykpO5kQJ98 &"
 alias en-dw="mpv https://www.youtube.com/watch?v=tZT2MCYu6Zw &"
+alias en-euronews="mpv https://www.youtube.com/watch?v=pykpO5kQJ98 &"
+alias en-france24="mpv https://www.youtube.com/watch?v=Ap-UM1O9RBU &"
 
 export LESSOPEN="| highlight --out-format=xterm256 --style=clarity %s"
 export LESS=' -R '
