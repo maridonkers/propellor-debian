@@ -364,6 +364,7 @@ keysAdditional =
     ("M-S-v", vlcPrompt "vlc"),
     ("M-y", spawn $ "mpv " <> "$(xsel)"),
     ("M-S-y", mpvPrompt "mpv"),
+    
     ("M-/ b", spawn myBrave),
     ("M-/ c", spawn myChromium),
     ("M-/ d", spawn myDillo),
@@ -381,6 +382,18 @@ keysAdditional =
     ("M-/ w", spawn myLibreWolf),
     ("M-/ y", spawn myYoutubeBrowser),
     ("M-/ z", spawn myFilezilla),
+    
+    ("M-. s d", spawn "mpv https://www.youtube.com/watch?v=Io5mt83nCcU"), -- dw
+    ("M-. s e", spawn "mpv https://www.youtube.com/watch?v=O9mOtdZ-nSk"), -- euronews
+    ("M-. s f", spawn "mpv https://www.youtube.com/live/Y-IlMeCCtIg"), -- france24
+    ("M-. s r", spawn "mpv https://www.youtube.com/watch?v=y3-l3m4MeU8"), -- rtve
+    ("M-. f e", spawn "mpv https://www.youtube.com/watch?v=NiRIbKwAejk"), -- euronews
+    ("M-. f f", spawn "mpv https://www.youtube.com/live/l8PMl7tUDIE"), -- france24
+    ("M-. f i", spawn "mpv https://www.youtube.com/watch?v=Z-Nwo-ypKtM"), -- franceinfo
+    ("M-. e d", spawn "mpv https://www.youtube.com/watch?v=tZT2MCYu6Zw"), -- dw
+    ("M-. e e", spawn "mpv https://www.youtube.com/watch?v=pykpO5kQJ98"), -- euronews
+    ("M-. e f", spawn "mpv https://www.youtube.com/watch?v=Ap-UM1O9RBU"), -- france24
+    
     -- , ("M-/ [", spawn "xrandr --output LVDS-1 --primary --auto --mode 1366x768 --pos 1920x312 --rotate normal --output VGA-1 --auto --mode 1440x900 --pos 0x0 --rotate normal --output HDMI-1 --off --output DP-1 --off")
     ("M-/ [", spawn "xrandr --output LVDS-1 --primary --auto --mode 1366x768 --pos 1920x312 --rotate normal --output VGA-1 --off --output HDMI-1 --auto --mode 1920x1080 --pos 0x0 --rotate normal --output DP-1 --off"),
     ("M-/ ]", spawn "xrandr --output LVDS-1 --primary --auto --output HDMI-1 --off --output VGA-1 --off --output DP-1 --off"),
