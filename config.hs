@@ -80,7 +80,8 @@ sapientia =
                           ]
       -- Configure standard sources; update & upgrade
       & Apt.stdSourcesList
-        `onChange` File.fileProperty "Add non-free-firmware" fAptSources "/etc/apt/sources.list"
+        -- No longer needed with latest Propellor version (directly from git master)
+        -- `onChange` File.fileProperty "Add non-free-firmware" fAptSources "/etc/apt/sources.list"
       -- & Apt.unattendedUpgrades -- TODO Is this useful?
       & Apt.update
       & Apt.upgrade
@@ -480,7 +481,7 @@ sapientia =
   where
     -- TODO What is this for exactly?
     -- & Cron.runPropellor (Cron.Times "30 * * * *")
-
+    {-
     fAptSources :: [File.Line] -> [File.Line]
     fAptSources = map f
       where
@@ -489,8 +490,10 @@ sapientia =
           if from `isPrefixOf` input
             then to ++ replaceAll (drop (length from) input) from to
             else head input : replaceAll (tail input) from to
-        f l = replaceAll l "non-free" "non-free non-free-firmware"
-
+        -- f l = replaceAll l " non-free" " non-free non-free-firmware"
+        f l = replaceAll l " non-free" " non-free"
+    -}
+    
     fSshdMatch :: [File.Line] -> [File.Line]
     fSshdMatch inputLines =
       if alreadyPresent propellorMark inputLines
