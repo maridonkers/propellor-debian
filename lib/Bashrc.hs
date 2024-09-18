@@ -307,7 +307,7 @@ alias nixsearch="nix search nixpkgs"
 alias nix-env="PAGER= nix-env"
 
 alias es-dw="mpv https://www.youtube.com/watch?v=Io5mt83nCcU &"
-# TODO WHAT HAVE THEY DONE? alias es-rtve="mpv https://www.youtube.com/watch?v=sRbziMycf4g &"
+alias es-rtve="mpv https://www.youtube.com/watch?v=y3-l3m4MeU8 &"
 alias es-france24="mpv https://www.youtube.com/live/Y-IlMeCCtIg &"
 alias es-euronews="mpv https://www.youtube.com/watch?v=O9mOtdZ-nSk &"
 
