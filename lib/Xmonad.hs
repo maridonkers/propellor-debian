@@ -605,10 +605,11 @@ myXPConfig =
 myManageHook :: ManageHook
 myManageHook =
   composeOne
-    [ className =? "mpv" -?> doFloat <+> hasBorder False,
-      className =? "cvlc" -?> doFloat <+> hasBorder False,
-      className =? "vlc" -?> doFloat <+> hasBorder False,
-      className =? "opera" -?> hasBorder True,
+    [
+      -- className =? "mpv" -?> doFloat <+> hasBorder False,
+      -- className =? "cvlc" -?> doFloat <+> hasBorder False,
+      -- className =? "vlc" -?> doFloat <+> hasBorder False,
+      -- className =? "opera" -?> hasBorder True,
       -- , title =? "Clementine" -?> doFloat <+> hasBorder False
       -- , title =? "ghci" -?> doFloat
       -- , title =? "python" -?> doFloat

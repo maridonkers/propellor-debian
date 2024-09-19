@@ -514,6 +514,7 @@ fSshdMatch inputLines =
     then inputLines
     else inputLines <> addedLines
   where
+    propellorMark = "# [Propellor match localhost root login with password]"
     addedLines =
       [ propellorMark,
         "Match host 127.0.0.1",
@@ -521,8 +522,6 @@ fSshdMatch inputLines =
         "    PermitRootLogin yes",
         "Match all"
       ]
-
-    propellorMark = "# [Propellor match localhost root login with password]"
     alreadyPresent :: String -> [File.Line] -> Bool
     alreadyPresent _ [] = False
     alreadyPresent mark lns = any (\l -> mark `isInfixOf` l) lns
