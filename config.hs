@@ -505,7 +505,7 @@ fAptSources = map f
 fPamSshd :: [File.Line] -> [File.Line]
 fPamSshd = map (replaceAll (mkRegex "^(session\\s+required\\s+pam_env.so)\\s+user_readenv=1") "\\1")
   where
-    replaceAll :: Regex -> File.Line -> String -> File.Line
+    replaceAll :: Regex -> String -> File.Line -> File.Line
     replaceAll regex replacement source = subRegex regex source replacement
 
 fSshdMatch :: [File.Line] -> [File.Line]
