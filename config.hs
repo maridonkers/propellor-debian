@@ -487,73 +487,73 @@ sapientia =
         `onChange` Systemd.restarted "ssh"
       -- Public key
       & Ssh.authorizedKey (User "mdo") "ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAFmvV41MBn9RoSWkUFnID+XafA7KqOf2wQhQnET1evIdjo8AIaSV5tjZ0strLZ6NjWayOU1JgjFCXfRJn+qq12vqgGgOF0i/9+R7GXnHMAoSktQiWvKwEFXuxTKqWv9g/tjrqGuxWNIDrYP+VD83k8qfseaLIWvkxWUQD4Tp6V7eRbVCA== u0_a75@localhost"
+
+-- & Cron.runPropellor (Cron.Times "30 * * * *") -- TODO What is this for exactly?
+
+{-
+fAptSources :: [File.Line] -> [File.Line]
+fAptSources = map f
   where
-    -- TODO What is this for exactly?
-    -- & Cron.runPropellor (Cron.Times "30 * * * *")
-    {-
-    fAptSources :: [File.Line] -> [File.Line]
-    fAptSources = map f
-      where
-        replaceAll [] _ _ = []
-        replaceAll input from to =
-          if from `isPrefixOf` input
-            then to ++ replaceAll (drop (length from) input) from to
-            else head input : replaceAll (tail input) from to
-        f l = replaceAll l " non-free" " non-free non-free-firmware"
-    -}
+    replaceAll [] _ _ = []
+    replaceAll input from to =
+      if from `isPrefixOf` input
+        then to ++ replaceAll (drop (length from) input) from to
+        else head input : replaceAll (tail input) from to
+    f l = replaceAll l " non-free" " non-free non-free-firmware"
+-}
 
-    fPamSshd :: [File.Line] -> [File.Line]
-    fPamSshd = map (replaceAll (mkRegex "^(session\\s+required\\s+pam_env.so)\\s+user_readenv=1") "\\1")
-      where
-        replaceAll :: Regex -> File.Line -> String -> File.Line
-        replaceAll regex replacement source = subRegex regex source replacement
+fPamSshd :: [File.Line] -> [File.Line]
+fPamSshd = map (replaceAll (mkRegex "^(session\\s+required\\s+pam_env.so)\\s+user_readenv=1") "\\1")
+  where
+    replaceAll :: Regex -> File.Line -> String -> File.Line
+    replaceAll regex replacement source = subRegex regex source replacement
 
-    fSshdMatch :: [File.Line] -> [File.Line]
-    fSshdMatch inputLines =
-      if alreadyPresent propellorMark inputLines
-        then inputLines
-        else inputLines <> addedLines
-      where
-        addedLines =
-          [ propellorMark,
-            "Match host 127.0.0.1",
-            "    PasswordAuthentication yes",
-            "    PermitRootLogin yes",
-            "Match all"
-          ]
+fSshdMatch :: [File.Line] -> [File.Line]
+fSshdMatch inputLines =
+  if alreadyPresent propellorMark inputLines
+    then inputLines
+    else inputLines <> addedLines
+  where
+    addedLines =
+      [ propellorMark,
+        "Match host 127.0.0.1",
+        "    PasswordAuthentication yes",
+        "    PermitRootLogin yes",
+        "Match all"
+      ]
 
-        propellorMark = "# [Propellor match localhost root login with password]"
-        alreadyPresent :: String -> [File.Line] -> Bool
-        alreadyPresent _ [] = False
-        alreadyPresent mark lns = any (\l -> mark `isInfixOf` l) lns
+    propellorMark = "# [Propellor match localhost root login with password]"
+    alreadyPresent :: String -> [File.Line] -> Bool
+    alreadyPresent _ [] = False
+    alreadyPresent mark lns = any (\l -> mark `isInfixOf` l) lns
 
-    fLibrewolf :: FilePath -> Property UnixLike
-    fLibrewolf p =
-      scriptProperty ["wget https://deb.librewolf.net/keyring.gpg -O- | gpg --dearmor -o " <> p]
-        `assume` MadeChange
-        `describe` "Librewolf repository key downloaded and saved"
+fLibrewolf :: FilePath -> Property UnixLike
+fLibrewolf p =
+  scriptProperty ["wget https://deb.librewolf.net/keyring.gpg -O- | gpg --dearmor -o " <> p]
+    `assume` MadeChange
+    `describe` "Librewolf repository key downloaded and saved"
 
-    fVivaldi :: FilePath -> Property UnixLike
-    fVivaldi p =
-      scriptProperty ["wget https://repo.vivaldi.com/archive/linux_signing_key.pub -O- | gpg --dearmor -o " <> p]
-        `assume` MadeChange
-        `describe` "Vivaldi repository key downloaded and saved"
+fVivaldi :: FilePath -> Property UnixLike
+fVivaldi p =
+  scriptProperty ["wget https://repo.vivaldi.com/archive/linux_signing_key.pub -O- | gpg --dearmor -o " <> p]
+    `assume` MadeChange
+    `describe` "Vivaldi repository key downloaded and saved"
 
-    fBrave :: FilePath -> Property UnixLike
-    fBrave p =
-      scriptProperty ["wget https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg -O- | gpg --dearmor -o " <> p]
-        `assume` MadeChange
-        `describe` "Brave repository key downloaded and saved"
+fBrave :: FilePath -> Property UnixLike
+fBrave p =
+  scriptProperty ["wget https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg -O- | gpg --dearmor -o " <> p]
+    `assume` MadeChange
+    `describe` "Brave repository key downloaded and saved"
 
-    -- TODO Yes, this needs to be manually changed when a new version is published...
-    fJellycli :: FilePath -> Property UnixLike
-    fJellycli p =
-      scriptProperty ["wget https://github.com/tryffel/jellycli/releases/download/v0.9.1/jellycli_0.9.1_Linux_x86_64 -O " <> p]
-        `assume` MadeChange
-        `describe` "Jellycli binary downloaded and saved"
+-- TODO Yes, this needs to be manually changed when a new version is published...
+fJellycli :: FilePath -> Property UnixLike
+fJellycli p =
+  scriptProperty ["wget https://github.com/tryffel/jellycli/releases/download/v0.9.1/jellycli_0.9.1_Linux_x86_64 -O " <> p]
+    `assume` MadeChange
+    `describe` "Jellycli binary downloaded and saved"
 
-    fJellyfin :: FilePath -> Property UnixLike
-    fJellyfin p =
-      scriptProperty ["wget https://repo.jellyfin.org/debian/jellyfin_team.gpg.key -O- | gpg --dearmor -o " <> p]
-        `assume` MadeChange
-        `describe` "Jellyfin repository key downloaded and saved"
+fJellyfin :: FilePath -> Property UnixLike
+fJellyfin p =
+  scriptProperty ["wget https://repo.jellyfin.org/debian/jellyfin_team.gpg.key -O- | gpg --dearmor -o " <> p]
+    `assume` MadeChange
+    `describe` "Jellyfin repository key downloaded and saved"
