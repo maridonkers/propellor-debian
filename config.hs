@@ -17,6 +17,7 @@ import qualified Propellor.Property.Ssh as Ssh
 import qualified Propellor.Property.Sudo as Sudo
 import qualified Propellor.Property.Systemd as Systemd
 import qualified Propellor.Property.User as User
+import Text.Regex (Regex, mkRegex, subRegex)
 import Tmux (tmuxMdo)
 import Xmonad (xmobarRc0, xmobarRc1, xmonadMdo)
 import Xwindows (xInitrc, xModmap, xResources)
@@ -80,8 +81,8 @@ sapientia =
                           ]
       -- Configure standard sources; update & upgrade
       & Apt.stdSourcesList
-        -- No longer needed with latest Propellor version (directly from git master)
-        -- `onChange` File.fileProperty "Add non-free-firmware" fAptSources "/etc/apt/sources.list"
+      -- No longer needed with latest Propellor version (directly from git master)
+      -- `onChange` File.fileProperty "Add non-free-firmware" fAptSources "/etc/apt/sources.list"
       -- & Apt.unattendedUpgrades -- TODO Is this useful?
       & Apt.update
       & Apt.upgrade
@@ -93,7 +94,10 @@ sapientia =
         "/dev/mapper/cr-home"
         "/home"
         (Fstab.MountOpts ["noatime,space_cache"]) -- mempty
-        -- Docker
+        -- Remove `user_readenv=1` from the `session required` line in /etc/pam.d/sshd
+        -- See: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1018106
+      & File.fileProperty "Remove user_readenv=1" fPamSshd "/etc/pam.d/sshd"
+      -- Docker
       & Docker.installed
       -- Install base packages
       & Apt.installed
@@ -491,10 +495,15 @@ sapientia =
           if from `isPrefixOf` input
             then to ++ replaceAll (drop (length from) input) from to
             else head input : replaceAll (tail input) from to
-        -- f l = replaceAll l " non-free" " non-free non-free-firmware"
-        f l = replaceAll l " non-free" " non-free"
+        f l = replaceAll l " non-free" " non-free non-free-firmware"
     -}
-    
+
+    fPamSshd :: [File.Line] -> [File.Line]
+    fPamSshd = map (replaceAll (mkRegex "^(session\\s+required\\s+pam_env.so)\\s+user_readenv=1") "\\1")
+      where
+        replaceAll :: Regex -> File.Line -> String -> File.Line
+        replaceAll regex replacement source = subRegex regex source replacement
+
     fSshdMatch :: [File.Line] -> [File.Line]
     fSshdMatch inputLines =
       if alreadyPresent propellorMark inputLines

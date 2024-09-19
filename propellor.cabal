@@ -257,7 +257,7 @@ Executable propellor-config
   Main-Is: propellor-config.hs
   GHC-Options: -threaded -Wall -fno-warn-tabs
   Default-Extensions: TypeOperators
-  Build-Depends: propellor, propellor-lib, base, containers (>= 0.5), directory
+  Build-Depends: propellor, propellor-lib, base, containers (>= 0.5), directory, regex-compat
 
 Executable propellor
   Default-Language: Haskell2010
