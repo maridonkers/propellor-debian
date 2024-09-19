@@ -46,6 +46,7 @@ sapientia =
       & Systemd.persistentJournal -- TODO What does this do?
       -- LibreWolf from their repository - https://librewolf.net/installation/debian
       & Apt.installed ["lsb-release", "apt-transport-https", "ca-certificates", "wget"]
+      -- Librewolf from their repository - https://deb.librewolf.net
       & File.checkOverwrite File.PreserveExisting "/usr/share/keyrings/librewolf.gpg" fLibrewolf
       & "/etc/apt/sources.list.d/librewolf.sources"
         `File.hasContent` [ "Types: deb",
@@ -94,8 +95,10 @@ sapientia =
         "/dev/mapper/cr-home"
         "/home"
         (Fstab.MountOpts ["noatime,space_cache"]) -- mempty
-        -- Remove `user_readenv=1` from the `session required` line in /etc/pam.d/sshd
-        -- See: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1018106
+
+      -- Remove `user_readenv=1` from the `session required` line in /etc/pam.d/sshd
+      -- session    required     pam_env.so user_readenv=1 envfile=/etc/default/locale
+      -- See: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1018106
       & File.fileProperty "Remove user_readenv=1" fPamSshd "/etc/pam.d/sshd"
       -- Docker
       & Docker.installed
@@ -372,6 +375,7 @@ sapientia =
           -- "yara",
           -- "zellij"
         ]
+      -- Backports packages
       & Apt.backportInstalled
         [ "sabnzbdplus",
           "yt-dlp"
@@ -429,8 +433,8 @@ sapientia =
                                "extra-experimental-features = flakes"
                              ]
       & File.ownerGroup "/home/mdo/.config/nix/nix.conf" (User "mdo") (Group "mdo")
-      -- TODO Get latest release as documented here: https://docs.github.com/en/repositories/releasing-projects-on-github/linking-to-releases
       -- Musikcube from downloaded archive
+      -- TODO Get latest release as documented here: https://docs.github.com/en/repositories/releasing-projects-on-github/linking-to-releases
       -- TODO Determine asset name for latest release by reading HTML or perhaps get tag? Also checking if already installed does not really suffice (compare installed version against potential newer version?)
       -- https://hackage.haskell.org/package/req-3.2.0/docs/Network-HTTP-Req.html
       & check
