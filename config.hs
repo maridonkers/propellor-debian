@@ -4,6 +4,7 @@
 import Bashrc (bashrcMdo, bashrcRoot)
 import Data.List
 import I3 (i3Config, i3StatusConfig)
+import Muttrc (muttrcMdo)
 import Nftables (nftRules)
 import Propellor
 import qualified Propellor.Property.Apt as Apt
@@ -396,6 +397,10 @@ sapientia =
       -- Sudo
       & Sudo.enabledFor (User "mdo")
       -- Secrets (to be included from ~/.bashrc files)
+      --   ./propellor --list-fields
+      --   ./propellor --set 'PrivFile "/home/mdo/.bashrc_secrets"' 'sapientia.mdo.bashrc.secrets' < source-for-bashrc_secrets
+      --   ./propellor --dump 'PrivFile "/home/mdo/.bashrc_secrets"' 'sapientia.mdo.bashrc.secrets'
+      --   ./propellor --edit 'PrivFile "/home/mdo/.bashrc_secrets"' 'sapientia.mdo.bashrc.secrets'
       & "/home/mdo/.bashrc_secrets"
         `File.hasPrivContentExposed` (Context "sapientia.mdo.bashrc.secrets")
       -- Configuration files
@@ -405,6 +410,15 @@ sapientia =
       & File.dirExists "/home/mdo"
       & "/home/mdo/.bashrc"
         `File.hasContent` lines bashrcMdo
+      & File.dirExists "/home/mdo/.mutt"
+      & "/home/mdo/.mutt/account.org.photonsphere.contact"
+        `File.hasPrivContentExposed` (Context "sapientia.mdo.muttrc.account.org.photonsphere.contact.secrets")
+      & "/home/mdo/.mutt/account.nl.donkersautomatisering.info"
+        `File.hasPrivContentExposed` (Context "sapientia.mdo.muttrc.account.nl.donkersautomatisering.info.secrets")
+      & "/home/mdo/.mutt/account.com.donkersphotography.contact"
+        `File.hasPrivContentExposed` (Context "sapientia.mdo.muttrc.account.com.donkersphotography.contact.secrets")
+      & "/home/mdo/.mutt/muttrc"
+        `File.hasContent` lines muttrcMdo
       & "/home/mdo/.tmux.conf"
         `File.hasContent` lines tmuxMdo
       & "/home/mdo/.Xresources"

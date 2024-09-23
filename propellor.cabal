@@ -20,6 +20,7 @@ Extra-Source-Files:
   joeyconfig.hs
   lib/Bashrc.hs
   lib/I3.hs
+  lib/Muttrc.hs
   lib/Nftables.hs
   lib/Quasiquote.hs
   lib/Tmux.hs
@@ -246,7 +247,7 @@ Library
     Paths_propellor
 
 Library propellor-lib
-  Exposed-Modules:     Bashrc,I3,Nftables,Quasiquote,Tmux,Xmonad,Xwindows
+  Exposed-Modules:     Bashrc,I3,Muttrc,Nftables,Quasiquote,Tmux,Xmonad,Xwindows
   Hs-Source-Dirs:      lib
   Build-Depends:       base, template-haskell
   Default-Language:    Haskell2010
