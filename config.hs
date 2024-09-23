@@ -271,6 +271,7 @@ sapientia =
           "tree",
           "unzip",
           "urlscan",
+          "urlview",
           "usbutils",
           "vim",
           "vim-nox",
