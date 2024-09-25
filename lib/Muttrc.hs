@@ -22,6 +22,9 @@ muttrcMdo =
 
 set browser_abbreviate_mailboxes=yes
 
+# Theme
+source ~/.mutt/dracula/dracula.muttrc
+
 # Folder hooks
 folder-hook 'account.org.photonsphere.contact' 'source ~/.mutt/account.org.photonsphere.contact'
 folder-hook 'account.nl.donkersautomatisering.info' 'source ~/.mutt/account.nl.donkersautomatisering.info'
@@ -34,12 +37,12 @@ folder-hook 'account.com.donkersphotography.contact' 'source ~/.mutt/account.com
 source ~/.mutt/account.org.photonsphere.contact
 
 # Switch accounts
-macro index <f1> '<sync-mailbox><enter-command>source ~/.mutt/account.org.photonsphere.contact<enter><change-folder>!<enter>'
-macro index <f2> '<sync-mailbox><enter-command>source ~/.mutt/account.nl.donkersautomatisering.info<enter><change-folder>!<enter>'
-macro index <f3> '<sync-mailbox><enter-command>source ~/.mutt/account.com.donkersphotography.contact<enter><change-folder>!<enter>'
-# macro index <f4> '<sync-mailbox><enter-command>source ~/.mutt/account.com.gmail.a.h.m.donkers<enter><change-folder>!<enter>'
-#macro index <f5> '<sync-mailbox><enter-command>source ~/.mutt/account.com.gmail.mari.donkers<enter><change-folder>!<enter>'
-#macro index <f6> '<sync-mailbox><enter-command>source ~/.mutt/account.com.gmail.donkersautomatisering<enter><change-folder>!<enter>'
+macro index A1 '<sync-mailbox><enter-command>source ~/.mutt/account.org.photonsphere.contact<enter><change-folder>!<enter>'
+macro index A2 '<sync-mailbox><enter-command>source ~/.mutt/account.nl.donkersautomatisering.info<enter><change-folder>!<enter>'
+macro index A3 '<sync-mailbox><enter-command>source ~/.mutt/account.com.donkersphotography.contact<enter><change-folder>!<enter>'
+# macro index A4 '<sync-mailbox><enter-command>source ~/.mutt/account.com.gmail.a.h.m.donkers<enter><change-folder>!<enter>'
+# macro index A5 '<sync-mailbox><enter-command>source ~/.mutt/account.com.gmail.mari.donkers<enter><change-folder>!<enter>'
+# macro index A6 '<sync-mailbox><enter-command>source ~/.mutt/account.com.gmail.donkersautomatisering<enter><change-folder>!<enter>'
 
 # HTML e-mail format
 auto_view text/html # view HTML automatically
