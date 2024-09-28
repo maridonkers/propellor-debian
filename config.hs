@@ -185,6 +185,7 @@ sapientia =
           "htop",
           "hugo",
           "i3",
+          "igal2",
           "imagemagick",
           "intel-microcode",
           "iotop",
