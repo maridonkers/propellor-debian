@@ -380,7 +380,7 @@ keysAdditional =
     ("M-/ o", spawn myTorBrowser),
     ("M-/ p", spawn myMusicPlayer),
     ("M-/ r", spawn myKOReader),
-    ("M-/ s", spawn myFloatingSlrn),
+    ("M-/ u", spawn myFloatingSlrn),
     ("M-/ t", spawn myThunderbird),
     ("M-/ v", spawn myVivaldi),
     ("M-/ w", spawn myLibreWolf),
