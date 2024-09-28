@@ -174,6 +174,12 @@ myFloatingGHCI = "xterm -title \"floatterm\" -e \"exec ghci\""
 myFloatingPython :: String
 myFloatingPython = "xterm -title \"floatterm\" -e \"exec python3\""
 
+myFloatingMutt :: String
+myFloatingMutt = "xterm -title \"floatterm\" -e \"exec mutt\""
+
+myFloatingSlrn :: String
+myFloatingSlrn = "xterm -title \"floatterm\" -e \"exec slrn\""
+
 myFileManager :: String
 myFileManager = "pcmanfm"
 
@@ -203,9 +209,6 @@ myLibreWolf = "librewolf"
 
 myBrave :: String
 myBrave = "brave-browser"
-
-myDillo :: String
-myDillo = "dillo"
 
 myVivaldi :: String
 myVivaldi = "vivaldi"
@@ -367,17 +370,18 @@ keysAdditional =
     
     ("M-/ b", spawn myBrave),
     ("M-/ c", spawn myChromium),
-    ("M-/ d", spawn myDillo),
     ("M-/ e", spawn myEditor),
     ("M-/ f", spawn myFileManager),
     ("M-/ h", spawn myFloatingGHCI),
     ("M-/ i", spawn myFloatingPython),
     ("M-/ k", spawn myKeepassXc),
     ("M-/ l", spawn myLibreOffice),
-    ("M-/ t", spawn myThunderbird),
-    ("M-/ m", spawn myMusicPlayer),
+    ("M-/ m", spawn myFloatingMutt),
     ("M-/ o", spawn myTorBrowser),
+    ("M-/ p", spawn myMusicPlayer),
     ("M-/ r", spawn myKOReader),
+    ("M-/ s", spawn myFloatingSlrn),
+    ("M-/ t", spawn myThunderbird),
     ("M-/ v", spawn myVivaldi),
     ("M-/ w", spawn myLibreWolf),
     ("M-/ y", spawn myYoutubeBrowser),

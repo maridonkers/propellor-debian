@@ -196,6 +196,7 @@ sapientia =
           "ledger",
           "lftp",
           "libpq-dev",
+          "librecad",
           "libreoffice",
           "librewolf",
           "libsdl2-dev",
