@@ -175,10 +175,10 @@ myFloatingPython :: String
 myFloatingPython = "xterm -title \"floatterm\" -e \"exec python3\""
 
 myFloatingMutt :: String
-myFloatingMutt = "xterm -title \"floatterm\" -e \"exec mutt\""
+myFloatingMutt = "xterm -title \"floatterm\" -geometry 115x35  -e \"exec mutt\""
 
 myFloatingSlrn :: String
-myFloatingSlrn = "xterm -title \"floatterm\" -e \"exec slrn\""
+myFloatingSlrn = "xterm -title \"floatterm\" -geometry 115x35 -e \"exec slrn\""
 
 myFileManager :: String
 myFileManager = "pcmanfm"
