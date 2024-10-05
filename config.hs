@@ -45,18 +45,12 @@ sapientia =
       & Grub.cmdline_Linux_default "i915.enable_psr=1" -- TODO What does this do?
         ! Grub.cmdline_Linux_default "quiet splash" -- TODO Does this work?
       & Systemd.persistentJournal -- TODO What does this do?
-      -- LibreWolf from their repository - https://librewolf.net/installation/debian
       & Apt.installed ["lsb-release", "apt-transport-https", "ca-certificates", "wget"]
-      -- Librewolf from their repository - https://deb.librewolf.net
-      & File.checkOverwrite File.PreserveExisting "/usr/share/keyrings/librewolf.gpg" fLibrewolf
-      & "/etc/apt/sources.list.d/librewolf.sources"
-        `File.hasContent` [ "Types: deb",
-                            "URIs: https://deb.librewolf.net",
-                            "Suites: bookworm",
-                            "Components: main",
-                            "Architectures: amd64",
-                            "Signed-By: /usr/share/keyrings/librewolf.gpg"
-                          ]
+      
+      -- Librewolf from their repository - https://librewolf.net/debian-migration/
+      & Apt.installed ["extrepo"]
+      & File.checkOverwrite File.PreserveExisting "/etc/apt/sources.list.d/extrepo_librewolf.sources" fLibrewolf
+
       -- Vivaldi from their repository - https://itsfoss.com/install-vivaldi-ubuntu-linux/
       & File.checkOverwrite File.PreserveExisting "/usr/share/keyrings/vivaldi-browser.gpg" fVivaldi
       & "/etc/apt/sources.list.d/vivaldi-archive.list"
@@ -98,7 +92,7 @@ sapientia =
         (Fstab.MountOpts ["noatime,space_cache"]) -- mempty
 
       -- Remove `user_readenv=1` from the `session required` line in /etc/pam.d/sshd
-      -- session    required     pam_env.so user_readenv=1 envfile=/etc/default/locale
+      -- `session    required     pam_env.so user_readenv=1 envfile=/etc/default/locale`
       -- See: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1018106
       & File.fileProperty "Remove user_readenv=1" fPamSshd "/etc/pam.d/sshd"
       -- Docker
@@ -494,6 +488,8 @@ sapientia =
             `assume` MadeChange
             `describe` "KOReader installed"
         )
+      -- Stack -- https://docs.haskellstack.org/en/stable/install_and_upgrade/
+      -- TODO curl -sSL https://get.haskellstack.org/ | sh
       -- Timezone
       & "/etc/timezone"
         `File.hasContent` ["Europe/Amsterdam"]
@@ -555,10 +551,10 @@ fSshdMatch inputLines =
     alreadyPresent mark lns = any (\l -> mark `isInfixOf` l) lns
 
 fLibrewolf :: FilePath -> Property UnixLike
-fLibrewolf p =
-  scriptProperty ["wget https://deb.librewolf.net/keyring.gpg -O- | gpg --dearmor -o " <> p]
+fLibrewolf _ =
+  scriptProperty ["extrepo enable librewolf"]
     `assume` MadeChange
-    `describe` "Librewolf repository key downloaded and saved"
+    `describe` "Librewolf repository enabled with extrepo"
 
 fVivaldi :: FilePath -> Property UnixLike
 fVivaldi p =
