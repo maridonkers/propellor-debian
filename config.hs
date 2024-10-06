@@ -43,474 +43,488 @@ sapientia =
       & Laptop.powertopAutoTuneOnBoot -- TODO What does this do?
       -- & Laptop.trimSSD -- TODO don't have SSDs
       & Grub.cmdline_Linux_default "i915.enable_psr=1" -- TODO What does this do?
-        ! Grub.cmdline_Linux_default "quiet splash" -- TODO Does this work?
-      & Systemd.persistentJournal -- TODO What does this do?
-      & Apt.installed ["lsb-release", "apt-transport-https", "ca-certificates", "wget"]
-      
-      -- Librewolf from their repository - https://librewolf.net/debian-migration/
-      & Apt.installed ["extrepo"]
-      & File.checkOverwrite File.PreserveExisting "/etc/apt/sources.list.d/extrepo_librewolf.sources" fLibrewolf
+      ! Grub.cmdline_Linux_default "quiet splash" -- TODO Does this work?
+        & Systemd.persistentJournal -- TODO What does this do?
+        & Apt.installed ["lsb-release", "apt-transport-https", "ca-certificates", "wget"]
+        -- Librewolf from their repository - https://librewolf.net/debian-migration/
+        & Apt.installed ["extrepo"]
+        & File.checkOverwrite File.PreserveExisting "/etc/apt/sources.list.d/extrepo_librewolf.sources" fLibrewolf
+        -- Vivaldi from their repository - https://itsfoss.com/install-vivaldi-ubuntu-linux/
+        & File.checkOverwrite File.PreserveExisting "/usr/share/keyrings/vivaldi-browser.gpg" fVivaldi
+        & "/etc/apt/sources.list.d/vivaldi-archive.list"
+          `File.hasContent` [ "deb [signed-by=/usr/share/keyrings/vivaldi-browser.gpg arch=amd64] https://repo.vivaldi.com/archive/deb/ stable main"
+                            ]
+        -- Brave from their repository - https://brave.com/linux/
+        & File.checkOverwrite File.PreserveExisting "/usr/share/keyrings/brave-browser-archive-keyring.gpg" fBrave
+        & "/etc/apt/sources.list.d/brave-browser-release.list"
+          `File.hasContent` [ "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"
+                            ]
+        -- Jellycli pre-built binary from GitHub
+        -- https://github.com/tryffel/jellycli
+        & File.checkOverwrite File.PreserveExisting "/usr/local/bin/jellycli" fJellycli
+        -- Jellyfin from their repository
+        -- https://linuxcapable.com/how-to-install-jellyfin-media-server-on-debian-linux/
+        & File.checkOverwrite File.PreserveExisting "/usr/share/keyrings/jellyfin.gpg" fJellyfin
+        & "/etc/apt/sources.list.d/jellyfin.sources"
+          `File.hasContent` [ "Types: deb",
+                              "URIs: https://repo.jellyfin.org/debian",
+                              "Suites: bookworm",
+                              "Components: main",
+                              "Architectures: amd64",
+                              "Signed-By: /usr/share/keyrings/jellyfin.gpg"
+                            ]
+        -- Configure standard sources; update & upgrade
+        & Apt.stdSourcesList
+        -- No longer needed with latest Propellor version (directly from git master)
+        -- `onChange` File.fileProperty "Add non-free-firmware" fAptSources "/etc/apt/sources.list"
+        -- & Apt.unattendedUpgrades -- TODO Is this useful?
+        & Apt.update
+        & Apt.upgrade
+        -- File systems for data partitions
+        & "/etc/crypttab"
+          `File.hasContent` ["cr-home UUID=75236c0e-cad4-43a7-986c-a5f82f68cf65 none luks"]
+        & Fstab.mounted
+          "btrfs"
+          "/dev/mapper/cr-home"
+          "/home"
+          (Fstab.MountOpts ["noatime,space_cache"]) -- mempty
 
-      -- Vivaldi from their repository - https://itsfoss.com/install-vivaldi-ubuntu-linux/
-      & File.checkOverwrite File.PreserveExisting "/usr/share/keyrings/vivaldi-browser.gpg" fVivaldi
-      & "/etc/apt/sources.list.d/vivaldi-archive.list"
-        `File.hasContent` [ "deb [signed-by=/usr/share/keyrings/vivaldi-browser.gpg arch=amd64] https://repo.vivaldi.com/archive/deb/ stable main"
-                          ]
-      -- Brave from their repository - https://brave.com/linux/
-      & File.checkOverwrite File.PreserveExisting "/usr/share/keyrings/brave-browser-archive-keyring.gpg" fBrave
-      & "/etc/apt/sources.list.d/brave-browser-release.list"
-        `File.hasContent` [ "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"
-                          ]
-      -- Jellycli pre-built binary from GitHub
-      -- https://github.com/tryffel/jellycli
-      & File.checkOverwrite File.PreserveExisting "/usr/local/bin/jellycli" fJellycli
-      -- Jellyfin from their repository
-      -- https://linuxcapable.com/how-to-install-jellyfin-media-server-on-debian-linux/
-      & File.checkOverwrite File.PreserveExisting "/usr/share/keyrings/jellyfin.gpg" fJellyfin
-      & "/etc/apt/sources.list.d/jellyfin.sources"
-        `File.hasContent` [ "Types: deb",
-                            "URIs: https://repo.jellyfin.org/debian",
-                            "Suites: bookworm",
-                            "Components: main",
-                            "Architectures: amd64",
-                            "Signed-By: /usr/share/keyrings/jellyfin.gpg"
-                          ]
-      -- Configure standard sources; update & upgrade
-      & Apt.stdSourcesList
-      -- No longer needed with latest Propellor version (directly from git master)
-      -- `onChange` File.fileProperty "Add non-free-firmware" fAptSources "/etc/apt/sources.list"
-      -- & Apt.unattendedUpgrades -- TODO Is this useful?
-      & Apt.update
-      & Apt.upgrade
-      -- File systems for data partitions
-      & "/etc/crypttab"
-        `File.hasContent` ["cr-home UUID=75236c0e-cad4-43a7-986c-a5f82f68cf65 none luks"]
-      & Fstab.mounted
-        "btrfs"
-        "/dev/mapper/cr-home"
-        "/home"
-        (Fstab.MountOpts ["noatime,space_cache"]) -- mempty
-
-      -- Remove `user_readenv=1` from the `session required` line in /etc/pam.d/sshd
-      -- `session    required     pam_env.so user_readenv=1 envfile=/etc/default/locale`
-      -- See: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1018106
-      & File.fileProperty "Remove user_readenv=1" fPamSshd "/etc/pam.d/sshd"
-      -- Docker
-      & Docker.installed
-      -- Install base packages
-      & Apt.installed
-        [ "android-file-transfer",
-          "apktool",
-          "apt-listbugs",
-          "arandr",
-          "aria2",
-          "ark",
-          "ascii",
-          "awscli",
-          "bat",
-          "beep",
-          "brave-browser",
-          "brotli",
-          "btrfsmaintenance",
-          "btrfs-heatmap",
-          "btrfs-progs",
-          "build-essential",
-          "cabal-install",
-          "calibre",
-          "ccache",
-          "chromium",
-          "cifs-utils",
-          "clamav",
-          "cowsay",
-          "cryptsetup",
-          "darcs",
-          "ddrescueview",
-          "ddrutility",
-          "dict",
-          "direnv",
-          "dmidecode",
-          "docker-compose",
-          "dos2unix",
-          "duperemove",
-          "dvdbackup",
-          "e2fsprogs",
-          "ecl",
-          "emacs",
-          "entr",
-          "etckeeper",
-          "exa",
-          "exif",
-          "exiv2",
-          "fd-find",
-          "feh",
-          "ffmpeg",
-          "figlet",
-          "file",
-          "filezilla",
-          "firmware-linux-free",
-          "firmware-linux-nonfree",
-          "firmware-misc-nonfree",
-          "fonts-hack",
-          "fonts-noto-hinted",
-          "fortune-mod",
-          "fortunes",
-          "freecad",
-          "fzf",
-          "gddrescue",
-          "genisoimage",
-          "ghc",
-          "gimp",
-          "git-crypt",
-          "git-lfs",
-          "git-remote-gcrypt",
-          "gnupg",
-          "gpg",
-          "graphviz",
-          -- "guix",
-          "handbrake-cli",
-          "hashcat",
-          "hcxtools",
-          "heimdall-flash",
-          "heimdall-flash-frontend",
-          "highlight",
-          "hledger",
-          "hledger-ui",
-          "hlint",
-          "horst",
-          "hplip",
-          "htop",
-          "hugo",
-          -- "i3",
-          "igal2",
-          "imagemagick",
-          "intel-microcode",
-          "iotop",
-          "isync",
-          "jellyfin",
-          "jp2a",
-          "jq",
-          "keepassxc",
-          "ldraw-parts",
-          "ledger",
-          "leocad",
-          "lftp",
-          "libpq-dev",
-          "librecad",
-          "libreoffice",
-          "librewolf",
-          "libsdl2-dev",
-          "lksctp-tools",
-          "lshw",
-          "lsof",
-          "lsscsi",
-          "lynis",
-          "lynx",
-          "mercurial",
-          "mkvtoolnix",
-          "mpack",
-          "mpv",
-          "mutt",
-          "myrescue",
-          "ncal",
-          "needrestart",
-          "needrestart-session",
-          "neofetch",
-          "net-tools",
-          "network-manager",
-          "nftables",
-          -- "nix-bin",
-          "nmap",
-          "notmuch",
-          "offlineimap",
-          "openscad",
-          "openssl",
-          "openvpn",
-          "ormolu",
-          "p7zip",
-          "pandoc",
-          "par",
-          "pass",
-          "pciutils",
-          "pcmanfm",
-          "plantuml", -- "plantuml-c4"
-          "poppler-utils",
-          "psensor",
-          "psmisc",
-          "pulseaudio",
-          "pulsemixer",
-          "pv",
-          "python3-pip",
-          "rawtherapee",
-          "rename",
-          "restic",
-          "rfkill",
-          "ripgrep",
-          "rmlint",
-          "rsync",
-          "safecopy",
-          "screen",
-          "scrot",
-          "silversearcher-ag",
-          "slrn",
-          "smartmontools",
-          "smem",
-          "smemstat",
-          "snapd",
-          "socat",
-          "speedtest-cli",
-          "sqlite3",
-          "ssh",
-          "sshfs",
-          "subtitlecomposer",
-          "suckless-tools",
-          "sweethome3d",
-          "sweethome3d-furniture",
-          "sweethome3d-furniture-editor",
-          "sweethome3d-furniture-nonfree",
-          "sysstat",
-          "thunderbird",
-          "tidy",
-          "tig",
-          "tmux",
-          "torbrowser-launcher",
-          "translate-shell",
-          "tree",
-          "unzip",
-          "urlscan",
-          "urlview",
-          "usbutils",
-          "vim",
-          "vim-nox",
-          "virt-manager",
-          "vivaldi-stable",
-          "vlc",
-          "vym",
-          "wcalc",
-          "wf-recorder",
-          "wmctrl",
-          "wpasupplicant",
-          "x11-apps",
-          "x11-utils",
-          "xdotool",
-          "xinit", --TODO
-          "xmobar",
-          "xmonad",
-          "xsane",
-          "xsel",
-          "xterm",
-          "ytfzf",
-          "zathura"
-          -- "android-studio",
-          -- "appimage-run",
-          -- "aspellDicts.en",
-          -- "aspellDicts.en-computers",
-          -- "aspellDicts.en-science",
-          -- "aspellDicts.nl",
-          -- "bandwhich",
-          -- "banner",
-          -- "binutils-unwrapped",
-          -- "bottom",
-          -- "boxes",
-          -- "cbonsai",
-          -- "cdrkit",
-          -- "cmatrix",
-          -- "compsize",
-          -- "cpdump",
-          -- "dbmate",
-          -- "digikam",
-          -- "exliveMinimal",
-          -- "fortune",
-          -- "freetube", -- TODO where to get for Debian?
-          -- "freetype",
-          -- "gambit",
-          -- "gcc_multi",
-          -- "gerbil",
-          -- "hashcat-utils",
-          -- "hdparm",
-          -- "inetutils",
-          -- "ipfs",
-          -- "irccloud",
-          -- "jujutsu",
-          -- "just",
-          -- "kate",
-          -- "kdenlive",
-          -- "kdiff3",
-          -- "killall",
-          -- "kismet",
-          -- "lazygit",
-          -- "librecad",
-          -- "libstemmer",
-          -- "lm_sensors",
-          -- "mdcat",
-          -- "metasploit",
-          -- "neovim",
-          -- "neovim-qt",
-          -- "nomacs",
-          -- "nyxt",
-          -- "okei",
-          -- "okular",
-          -- "ollama",
-          -- "ookla-speedtest",
-          -- "opencascade-occt",
-          -- "openh264",
-          -- "opera",
-          -- "or-browser-bundle-bin",
-          -- "oterm",
-          -- "paperwork",
-          -- "pavucontrol",
-          -- "pcre",
-          -- "pmutils",
-          -- "procs",
-          -- "pstree",
-          -- "racket",
-          -- "ranger",
-          -- "rclone",
-          -- "rustup",
-          -- "skim",
-          -- "snapper",
-          -- "sourceHighlight",
-          -- "stack",
-          -- "subdl",
-          -- "subtitleeditor",
-          -- "sutils",
-          -- "ums",
-          -- "wapm-cli",
-          -- "wasmer",
-          -- "weather",
-          -- "wine",
-          -- "winetricks",
-          -- "wirelesstools",
-          -- "xclip",
-          -- "yara",
-          -- "zellij"
-        ]
-      -- Backports packages
-      & Apt.backportInstalled
-        [ "sabnzbdplus",
-          "yt-dlp"
-        ]
-      -- Users and groups
-      & User.hasSomePassword (User "root")
-      & User.accountFor (User "mdo")
-      & User.hasSomePassword (User "mdo")
-      & User.accountFor (User "csp")
-      & User.hasSomePassword (User "csp")
-      & Group.hasUser (Group "docker") (User "mdo")
-      & Group.hasUser (Group "libvirt") (User "mdo")
-      & Group.hasUser (Group "kvm") (User "mdo")
-      & Group.hasUser (Group "adm") (User "mdo")
-      -- Use with lix — https://git.lix.systems/lix-project/lix
-      & Group.hasUser (Group "nix-users") (User "mdo")
-      -- Sudo
-      & Sudo.enabledFor (User "mdo")
-      -- Secrets (to be included from ~/.bashrc files)
-      --   ./propellor --list-fields
-      --   ./propellor --set 'PrivFile "/home/mdo/.bashrc_secrets"' 'sapientia.mdo.bashrc.secrets' < source-for-bashrc_secrets
-      --   ./propellor --dump 'PrivFile "/home/mdo/.bashrc_secrets"' 'sapientia.mdo.bashrc.secrets'
-      --   ./propellor --edit 'PrivFile "/home/mdo/.bashrc_secrets"' 'sapientia.mdo.bashrc.secrets'
-      & "/home/mdo/.bashrc_secrets"
-        `File.hasPrivContentExposed` (Context "sapientia.mdo.bashrc.secrets")
-      -- Configuration files
-      & File.dirExists "/root"
-      & "/root/.bashrc"
-        `File.hasContent` lines bashrcRoot
-      & File.dirExists "/home/mdo"
-      & "/home/mdo/.bashrc"
-        `File.hasContent` lines bashrcMdo
-      & File.dirExists "/home/mdo/.mutt"
-      & "/home/mdo/.mutt/account.org.photonsphere.contact"
-        `File.hasPrivContentExposed` (Context "sapientia.mdo.muttrc.account.org.photonsphere.contact.secrets")
-      & "/home/mdo/.mutt/account.nl.donkersautomatisering.info"
-        `File.hasPrivContentExposed` (Context "sapientia.mdo.muttrc.account.nl.donkersautomatisering.info.secrets")
-      & "/home/mdo/.mutt/account.com.donkersphotography.contact"
-        `File.hasPrivContentExposed` (Context "sapientia.mdo.muttrc.account.com.donkersphotography.contact.secrets")
-      & "/home/mdo/.mutt/muttrc"
-        `File.hasContent` lines muttrcMdo
-      & "/home/mdo/.tmux.conf"
-        `File.hasContent` lines tmuxMdo
-      & "/home/mdo/.Xresources"
-        `File.hasContent` lines xResources
-      & "/home/mdo/.Xmodmap"
-        `File.hasContent` lines xModmap
-      & "/home/mdo/.xinitrc"
-        `File.hasContent` lines xInitrc
-      & File.dirExists "/home/mdo/.config"
-      & File.dirExists "/home/mdo/.config/i3"
-      & "/home/mdo/.config/i3/config"
-        `File.hasContent` lines i3Config
-      & File.dirExists "/home/mdo/.config/i3status"
-      & "/home/mdo/.config/i3status/config"
-        `File.hasContent` lines i3StatusConfig
-      & File.dirExists "/home/mdo/.xmonad"
-      & "/home/mdo/.xmonad/xmonad.hs"
-        `File.hasContent` lines xmonadMdo
-      & File.dirExists "/home/mdo/.config/xmobar"
-      & "/home/mdo/.config/xmobar/xmobarrc0"
-        `File.hasContent` lines xmobarRc0
-      & "/home/mdo/.config/xmobar/xmobarrc1"
-        `File.hasContent` lines xmobarRc1
-      & File.dirExists "/home/mdo/.config/nix"
-      & "/home/mdo/.config/nix/nix.conf"
-        `File.containsLines` [ "extra-experimental-features = nix-command",
-                               "extra-experimental-features = flakes"
-                             ]
-      & File.ownerGroup "/home/mdo/.config/nix/nix.conf" (User "mdo") (Group "mdo")
-      -- Musikcube from downloaded archive
-      -- TODO Get latest release as documented here: https://docs.github.com/en/repositories/releasing-projects-on-github/linking-to-releases
-      -- TODO Determine asset name for latest release by reading HTML or perhaps get tag? Also checking if already installed does not really suffice (compare installed version against potential newer version?)
-      -- https://hackage.haskell.org/package/req-3.2.0/docs/Network-HTTP-Req.html
-      & check
-        (not <$> Apt.isInstalled "musikcube")
-        -- Via: https://github.com/clangen/musikcube/releases/latest/musikcube_3.0.4_linux_x86_64.deb"
-        ( cmdProperty "wget" ["https://github.com/clangen/musikcube/releases/download/3.0.4/musikcube_3.0.4_linux_x86_64.deb", "-O", "/root/musikcube_3.0.4_linux_x86_64.deb"]
-            `assume` MadeChange
-            `describe` "Musikcube archive downloaded"
-        )
-      & check
-        (not <$> Apt.isInstalled "musikcube")
-        ( cmdProperty "dpkg" ["-i", "/root/musikcube_3.0.4_linux_x86_64.deb"]
-            `assume` MadeChange
-            `describe` "Musikcube installed"
-        )
-      -- KOReader from downloaded archive latest working for Debian
-      -- https://github-wiki-see.page/m/koreader/koreader/wiki/Installation-on-desktop-Linux
-      & check
-        (not <$> Apt.isInstalled "koreader")
-        ( cmdProperty "wget" ["https://github.com/koreader/koreader/releases/download/v2024.04/koreader-2024.04-amd64.deb", "-O", "/root/koreader-2024.04-amd64.deb"]
-            `assume` MadeChange
-            `describe` "KOReader archive downloaded"
-        )
-      & check
-        (not <$> Apt.isInstalled "koreader")
-        ( cmdProperty
-            "dpkg"
-            ["-i", "/root/koreader-2024.04-amd64.deb"]
-            `assume` MadeChange
-            `describe` "KOReader installed"
-        )
-      -- Stack -- https://docs.haskellstack.org/en/stable/install_and_upgrade/
-      -- TODO curl -sSL https://get.haskellstack.org/ | sh
-      -- Timezone
-      & "/etc/timezone"
-        `File.hasContent` ["Europe/Amsterdam"]
-      -- Systemd
-      & Systemd.installed
-      & Apt.serviceInstalledRunning "ntp"
-      -- Firewall
-      & Systemd.enabled "nftables"
-      & Apt.serviceInstalledRunning "nftables"
-      & "/etc/nftables.conf"
-        `File.hasContent` lines nftRules
-        `onChange` Systemd.restarted "nftables"
-      -- SSH
-      & Systemd.enabled "ssh"
-      & Apt.serviceInstalledRunning "ssh"
-      & Ssh.passwordAuthentication False
-      & Ssh.setSshdConfig "PermitRootLogin" "prohibit-password"
-      & File.fileProperty "Add sshd config Match block" fSshdMatch "/etc/ssh/sshd_config"
-        `onChange` Systemd.restarted "ssh"
-      -- Public key
-      & Ssh.authorizedKey (User "mdo") "ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAFmvV41MBn9RoSWkUFnID+XafA7KqOf2wQhQnET1evIdjo8AIaSV5tjZ0strLZ6NjWayOU1JgjFCXfRJn+qq12vqgGgOF0i/9+R7GXnHMAoSktQiWvKwEFXuxTKqWv9g/tjrqGuxWNIDrYP+VD83k8qfseaLIWvkxWUQD4Tp6V7eRbVCA== u0_a75@localhost"
+        -- Remove `user_readenv=1` from the `session required` line in /etc/pam.d/sshd
+        -- `session    required     pam_env.so user_readenv=1 envfile=/etc/default/locale`
+        -- See: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1018106
+        & File.fileProperty "Remove user_readenv=1" fPamSshd "/etc/pam.d/sshd"
+        -- Docker
+        & Docker.installed
+        -- Install base packages
+        & Apt.installed
+          [ "android-file-transfer",
+            "apktool",
+            "apt-listbugs",
+            "arandr",
+            "aria2",
+            "ark",
+            "ascii",
+            "awscli",
+            "bat",
+            "beep",
+            "brave-browser",
+            "brotli",
+            "btrfsmaintenance",
+            "btrfs-heatmap",
+            "btrfs-progs",
+            "build-essential",
+            "cabal-install",
+            "calibre",
+            "ccache",
+            "chromium",
+            "cifs-utils",
+            "clamav",
+            "cowsay",
+            "cryptsetup",
+            "darcs",
+            "ddrescueview",
+            "ddrutility",
+            "dict",
+            "direnv",
+            "dmidecode",
+            "docker-compose",
+            "dos2unix",
+            "duperemove",
+            "dvdbackup",
+            "e2fsprogs",
+            "ecl",
+            "emacs",
+            "entr",
+            "etckeeper",
+            "exa",
+            "exif",
+            "exiv2",
+            "fd-find",
+            "feh",
+            "ffmpeg",
+            "figlet",
+            "file",
+            "filezilla",
+            "firmware-linux-free",
+            "firmware-linux-nonfree",
+            "firmware-misc-nonfree",
+            "fonts-hack",
+            "fonts-noto-hinted",
+            "fortune-mod",
+            "fortunes",
+            "freecad",
+            "fzf",
+            "gddrescue",
+            "genisoimage",
+            "ghc",
+            "gimp",
+            "git-crypt",
+            "git-lfs",
+            "git-remote-gcrypt",
+            "gnupg",
+            "gpg",
+            "graphviz",
+            -- "guix",
+            "handbrake-cli",
+            "hashcat",
+            "hcxtools",
+            "heimdall-flash",
+            "heimdall-flash-frontend",
+            "highlight",
+            "hledger",
+            "hledger-ui",
+            "hlint",
+            "horst",
+            "hplip",
+            "htop",
+            "hugo",
+            -- "i3",
+            "igal2",
+            "imagemagick",
+            "intel-microcode",
+            "iotop",
+            "isync",
+            "jellyfin",
+            "jp2a",
+            "jq",
+            "keepassxc",
+            "ldraw-parts",
+            "ledger",
+            "leocad",
+            "lftp",
+            "libpq-dev",
+            "librecad",
+            "libreoffice",
+            "librewolf",
+            "libsdl2-dev",
+            "lksctp-tools",
+            "lshw",
+            "lsof",
+            "lsscsi",
+            "lynis",
+            "lynx",
+            "mercurial",
+            "mkvtoolnix",
+            "mpack",
+            "mpv",
+            "mutt",
+            "myrescue",
+            "ncal",
+            "needrestart",
+            "needrestart-session",
+            "neofetch",
+            "net-tools",
+            "network-manager",
+            "nftables",
+            -- "nix-bin",
+            "nmap",
+            "notmuch",
+            "offlineimap",
+            "openscad",
+            "openssl",
+            "openvpn",
+            "ormolu",
+            "p7zip",
+            "pandoc",
+            "par",
+            "pass",
+            "pciutils",
+            "pcmanfm",
+            "plantuml", -- "plantuml-c4"
+            "poppler-utils",
+            "psensor",
+            "psmisc",
+            "pulseaudio",
+            "pulsemixer",
+            "pv",
+            "python3-pip",
+            "rawtherapee",
+            "rename",
+            "restic",
+            "rfkill",
+            "ripgrep",
+            "rmlint",
+            "rsync",
+            "safecopy",
+            "screen",
+            "scrot",
+            "silversearcher-ag",
+            "slrn",
+            "smartmontools",
+            "smem",
+            "smemstat",
+            "snapd",
+            "socat",
+            "speedtest-cli",
+            "sqlite3",
+            "ssh",
+            "sshfs",
+            "subtitlecomposer",
+            "suckless-tools",
+            "sweethome3d",
+            "sweethome3d-furniture",
+            "sweethome3d-furniture-editor",
+            "sweethome3d-furniture-nonfree",
+            "sysstat",
+            "thunderbird",
+            "tidy",
+            "tig",
+            "tmux",
+            "torbrowser-launcher",
+            "translate-shell",
+            "tree",
+            "unzip",
+            "urlscan",
+            "urlview",
+            "usbutils",
+            "vim",
+            "vim-nox",
+            "virt-manager",
+            "vivaldi-stable",
+            "vlc",
+            "vym",
+            "wcalc",
+            "wf-recorder",
+            "wmctrl",
+            "wpasupplicant",
+            "x11-apps",
+            "x11-utils",
+            "xdotool",
+            "xinit", --TODO
+            "xmobar",
+            "xmonad",
+            "xsane",
+            "xsel",
+            "xterm",
+            "ytfzf",
+            "zathura"
+            -- "android-studio",
+            -- "appimage-run",
+            -- "aspellDicts.en",
+            -- "aspellDicts.en-computers",
+            -- "aspellDicts.en-science",
+            -- "aspellDicts.nl",
+            -- "bandwhich",
+            -- "banner",
+            -- "binutils-unwrapped",
+            -- "bottom",
+            -- "boxes",
+            -- "cbonsai",
+            -- "cdrkit",
+            -- "cmatrix",
+            -- "compsize",
+            -- "cpdump",
+            -- "dbmate",
+            -- "digikam",
+            -- "exliveMinimal",
+            -- "fortune",
+            -- "freetype",
+            -- "gambit",
+            -- "gcc_multi",
+            -- "gerbil",
+            -- "hashcat-utils",
+            -- "hdparm",
+            -- "inetutils",
+            -- "ipfs",
+            -- "irccloud",
+            -- "jujutsu",
+            -- "just",
+            -- "kate",
+            -- "kdenlive",
+            -- "kdiff3",
+            -- "killall",
+            -- "kismet",
+            -- "lazygit",
+            -- "librecad",
+            -- "libstemmer",
+            -- "lm_sensors",
+            -- "mdcat",
+            -- "metasploit",
+            -- "neovim",
+            -- "neovim-qt",
+            -- "nomacs",
+            -- "nyxt",
+            -- "okei",
+            -- "okular",
+            -- "ollama",
+            -- "ookla-speedtest",
+            -- "opencascade-occt",
+            -- "openh264",
+            -- "opera",
+            -- "or-browser-bundle-bin",
+            -- "oterm",
+            -- "paperwork",
+            -- "pavucontrol",
+            -- "pcre",
+            -- "pmutils",
+            -- "procs",
+            -- "pstree",
+            -- "racket",
+            -- "ranger",
+            -- "rclone",
+            -- "rustup",
+            -- "skim",
+            -- "snapper",
+            -- "sourceHighlight",
+            -- "stack",
+            -- "subdl",
+            -- "subtitleeditor",
+            -- "sutils",
+            -- "ums",
+            -- "wapm-cli",
+            -- "wasmer",
+            -- "weather",
+            -- "wine",
+            -- "winetricks",
+            -- "wirelesstools",
+            -- "xclip",
+            -- "yara",
+            -- "zellij"
+          ]
+        -- Backports packages
+        & Apt.backportInstalled
+          [ "sabnzbdplus",
+            "yt-dlp"
+          ]
+        -- Users and groups
+        & User.hasSomePassword (User "root")
+        & User.accountFor (User "mdo")
+        & User.hasSomePassword (User "mdo")
+        & User.accountFor (User "csp")
+        & User.hasSomePassword (User "csp")
+        & Group.hasUser (Group "docker") (User "mdo")
+        & Group.hasUser (Group "libvirt") (User "mdo")
+        & Group.hasUser (Group "kvm") (User "mdo")
+        & Group.hasUser (Group "adm") (User "mdo")
+        -- Use with lix — https://git.lix.systems/lix-project/lix
+        & Group.hasUser (Group "nix-users") (User "mdo")
+        -- Sudo
+        & Sudo.enabledFor (User "mdo")
+        -- Secrets (to be included from ~/.bashrc files)
+        --   ./propellor --list-fields
+        --   ./propellor --set 'PrivFile "/home/mdo/.bashrc_secrets"' 'sapientia.mdo.bashrc.secrets' < source-for-bashrc_secrets
+        --   ./propellor --dump 'PrivFile "/home/mdo/.bashrc_secrets"' 'sapientia.mdo.bashrc.secrets'
+        --   ./propellor --edit 'PrivFile "/home/mdo/.bashrc_secrets"' 'sapientia.mdo.bashrc.secrets'
+        & "/home/mdo/.bashrc_secrets"
+      `File.hasPrivContentExposed` (Context "sapientia.mdo.bashrc.secrets")
+        -- Configuration files
+        & File.dirExists "/root"
+        & "/root/.bashrc"
+          `File.hasContent` lines bashrcRoot
+        & File.dirExists "/home/mdo"
+        & "/home/mdo/.bashrc"
+          `File.hasContent` lines bashrcMdo
+        & File.dirExists "/home/mdo/.mutt"
+        & "/home/mdo/.mutt/account.org.photonsphere.contact"
+      `File.hasPrivContentExposed` (Context "sapientia.mdo.muttrc.account.org.photonsphere.contact.secrets")
+        & "/home/mdo/.mutt/account.nl.donkersautomatisering.info"
+      `File.hasPrivContentExposed` (Context "sapientia.mdo.muttrc.account.nl.donkersautomatisering.info.secrets")
+        & "/home/mdo/.mutt/account.com.donkersphotography.contact"
+      `File.hasPrivContentExposed` (Context "sapientia.mdo.muttrc.account.com.donkersphotography.contact.secrets")
+        & "/home/mdo/.mutt/muttrc"
+          `File.hasContent` lines muttrcMdo
+        & "/home/mdo/.tmux.conf"
+          `File.hasContent` lines tmuxMdo
+        & "/home/mdo/.Xresources"
+          `File.hasContent` lines xResources
+        & "/home/mdo/.Xmodmap"
+          `File.hasContent` lines xModmap
+        & "/home/mdo/.xinitrc"
+          `File.hasContent` lines xInitrc
+        & File.dirExists "/home/mdo/.config"
+        & File.dirExists "/home/mdo/.config/i3"
+        & "/home/mdo/.config/i3/config"
+          `File.hasContent` lines i3Config
+        & File.dirExists "/home/mdo/.config/i3status"
+        & "/home/mdo/.config/i3status/config"
+          `File.hasContent` lines i3StatusConfig
+        & File.dirExists "/home/mdo/.xmonad"
+        & "/home/mdo/.xmonad/xmonad.hs"
+          `File.hasContent` lines xmonadMdo
+        & File.dirExists "/home/mdo/.config/xmobar"
+        & "/home/mdo/.config/xmobar/xmobarrc0"
+          `File.hasContent` lines xmobarRc0
+        & "/home/mdo/.config/xmobar/xmobarrc1"
+          `File.hasContent` lines xmobarRc1
+        & File.dirExists "/home/mdo/.config/nix"
+        & "/home/mdo/.config/nix/nix.conf"
+      `File.containsLines` [ "extra-experimental-features = nix-command",
+                             "extra-experimental-features = flakes"
+                           ]
+        & File.ownerGroup "/home/mdo/.config/nix/nix.conf" (User "mdo") (Group "mdo")
+        -- Musikcube from downloaded archive
+        -- TODO Get latest release as documented here: https://docs.github.com/en/repositories/releasing-projects-on-github/linking-to-releases
+        -- TODO Determine asset name for latest release by reading HTML or perhaps get tag? Also checking if already installed does not really suffice (compare installed version against potential newer version?)
+        -- https://hackage.haskell.org/package/req-3.2.0/docs/Network-HTTP-Req.html
+        & check
+          (not <$> Apt.isInstalled "musikcube")
+          -- Via: https://github.com/clangen/musikcube/releases/latest/musikcube_3.0.4_linux_x86_64.deb"
+          ( cmdProperty "wget" ["https://github.com/clangen/musikcube/releases/download/3.0.4/musikcube_3.0.4_linux_x86_64.deb", "-O", "/root/musikcube_3.0.4_linux_x86_64.deb"]
+              `assume` MadeChange
+              `describe` "Musikcube archive downloaded"
+          )
+        & check
+          (not <$> Apt.isInstalled "musikcube")
+          ( cmdProperty "dpkg" ["-i", "/root/musikcube_3.0.4_linux_x86_64.deb"]
+              `assume` MadeChange
+              `describe` "Musikcube installed"
+          )
+        -- KOReader from downloaded archive latest working for Debian
+        -- https://github-wiki-see.page/m/koreader/koreader/wiki/Installation-on-desktop-Linux
+        & check
+          (not <$> Apt.isInstalled "koreader")
+          ( cmdProperty "wget" ["https://github.com/koreader/koreader/releases/download/v2024.04/koreader-2024.04-amd64.deb", "-O", "/root/koreader-2024.04-amd64.deb"]
+              `assume` MadeChange
+              `describe` "KOReader archive downloaded"
+          )
+        & check
+          (not <$> Apt.isInstalled "koreader")
+          ( cmdProperty
+              "dpkg"
+              ["-i", "/root/koreader-2024.04-amd64.deb"]
+              `assume` MadeChange
+              `describe` "KOReader installed"
+          )
+        -- Stack -- https://docs.haskellstack.org/en/stable/install_and_upgrade/
+        -- TODO curl -sSL https://get.haskellstack.org/ | sh
+        -- Install snap packages
+        & propertyList
+          "Install snap packages"
+          ( toProps $
+              map
+                ( \p ->
+                    cmdProperty "snap" ["install", p]
+                      `assume` MadeChange
+                      `describe` (p <> " installed")
+                )
+                -- Put snap package to install here.
+                [ -- "android-platform-tools", -- TODO warning `classic` snap package
+                  -- "android-studio", -- TODO warning `classic` snap package
+                  "androidsdk",
+                  "freetube"
+                ]
+          )
+        -- Timezone
+        & "/etc/timezone"
+          `File.hasContent` ["Europe/Amsterdam"]
+        -- Systemd
+        & Systemd.installed
+        & Apt.serviceInstalledRunning "ntp"
+        -- Firewall
+        & Systemd.enabled "nftables"
+        & Apt.serviceInstalledRunning "nftables"
+        & "/etc/nftables.conf"
+          `File.hasContent` lines nftRules
+          `onChange` Systemd.restarted "nftables"
+        -- SSH
+        & Systemd.enabled "ssh"
+        & Apt.serviceInstalledRunning "ssh"
+        & Ssh.passwordAuthentication False
+        & Ssh.setSshdConfig "PermitRootLogin" "prohibit-password"
+        & File.fileProperty "Add sshd config Match block" fSshdMatch "/etc/ssh/sshd_config"
+          `onChange` Systemd.restarted "ssh"
+        -- Public key
+        & Ssh.authorizedKey (User "mdo") "ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAFmvV41MBn9RoSWkUFnID+XafA7KqOf2wQhQnET1evIdjo8AIaSV5tjZ0strLZ6NjWayOU1JgjFCXfRJn+qq12vqgGgOF0i/9+R7GXnHMAoSktQiWvKwEFXuxTKqWv9g/tjrqGuxWNIDrYP+VD83k8qfseaLIWvkxWUQD4Tp6V7eRbVCA== u0_a75@localhost"
 
 -- & Cron.runPropellor (Cron.Times "30 * * * *") -- TODO What is this for exactly?
 
