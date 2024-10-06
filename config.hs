@@ -485,8 +485,8 @@ sapientia =
               `assume` MadeChange
               `describe` "KOReader installed"
           )
-        -- Stack -- https://docs.haskellstack.org/en/stable/install_and_upgrade/
-        -- TODO curl -sSL https://get.haskellstack.org/ | sh
+        -- Install Haskell Stack -- https://docs.haskellstack.org/en/stable/install_and_upgrade/
+        & File.checkOverwrite File.PreserveExisting "/usr/local/bin/stack" fHaskellStack
         -- Install snap packages
         & propertyList
           "Install snap packages"
@@ -497,7 +497,7 @@ sapientia =
                       `assume` MadeChange
                       `describe` (p <> " installed")
                 )
-                -- Put snap package to install here.
+                -- Put snap packages to install here.
                 [ -- "android-platform-tools", -- TODO warning `classic` snap package
                   -- "android-studio", -- TODO warning `classic` snap package
                   "androidsdk",
@@ -594,3 +594,8 @@ fJellyfin p =
   scriptProperty ["wget https://repo.jellyfin.org/debian/jellyfin_team.gpg.key -O- | gpg --dearmor -o " <> p]
     `assume` MadeChange
     `describe` "Jellyfin repository key downloaded and saved"
+
+fHaskellStack  :: FilePath -> Property UnixLike
+fHaskellStack _ = scriptProperty ["curl -sSL https://get.haskellstack.org/ | sh"]
+    `assume` MadeChange
+    `describe` "Haskell stack downloaded and installed"
