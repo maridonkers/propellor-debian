@@ -360,11 +360,12 @@ keysAdditional =
     ("M-c", spawn myCursorToggle),
     ("M-C-<Return>", spawn myFloatingTerminal),
     ("M-e", spawn myEditor),
-    ("M-w", spawn myLibreWolf),
+    ("M-o", spawn myOpera),
     ("M-u", spawn $ "librewolf --new-window " <> "$(xsel)"),
     ("M-S-u", webPrompt "librewolf"),
     ("M-v", spawn $ printf "vlc " <> "$(xsel)"),
     ("M-S-v", vlcPrompt "vlc"),
+    ("M-w", spawn myLibreWolf),
     ("M-y", spawn $ "mpv " <> "$(xsel)"),
     ("M-S-y", mpvPrompt "mpv"),
     

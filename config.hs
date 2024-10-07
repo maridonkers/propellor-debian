@@ -46,10 +46,15 @@ sapientia =
       ! Grub.cmdline_Linux_default "quiet splash" -- TODO Does this work?
         & Systemd.persistentJournal -- TODO What does this do?
         & Apt.installed ["lsb-release", "apt-transport-https", "ca-certificates", "wget"]
-        -- Librewolf from their repository - https://librewolf.net/debian-migration/
+        -- Librewolf webbrowser from their repository - https://librewolf.net/debian-migration/
         & Apt.installed ["extrepo"]
         & File.checkOverwrite File.PreserveExisting "/etc/apt/sources.list.d/extrepo_librewolf.sources" fLibrewolf
-        -- Vivaldi from their repository - https://itsfoss.com/install-vivaldi-ubuntu-linux/
+        -- Opera webbrowser from their repository - https://deb.opera.com/manual.html
+        & File.checkOverwrite File.PreserveExisting "/usr/share/keyrings/opera-browser.gpg" fOpera
+        & "/etc/apt/sources.list.d/opera-archive.list"
+          `File.hasContent` [ "deb [signed-by=/usr/share/keyrings/opera-browser.gpg] https://deb.opera.com/opera-stable/ stable non-free"
+                            ]
+        -- Vivaldi webbrowser from their repository - https://itsfoss.com/install-vivaldi-ubuntu-linux/
         & File.checkOverwrite File.PreserveExisting "/usr/share/keyrings/vivaldi-browser.gpg" fVivaldi
         & "/etc/apt/sources.list.d/vivaldi-archive.list"
           `File.hasContent` [ "deb [signed-by=/usr/share/keyrings/vivaldi-browser.gpg arch=amd64] https://repo.vivaldi.com/archive/deb/ stable main"
@@ -117,6 +122,7 @@ sapientia =
             "calibre",
             "ccache",
             "chromium",
+            -- "chromium-codecs-ffmpeg-extra", -- TODO suggested but not available?
             "cifs-utils",
             "clamav",
             "cowsay",
@@ -223,6 +229,7 @@ sapientia =
             "openscad",
             "openssl",
             "openvpn",
+            "opera-stable",
             "ormolu",
             "p7zip",
             "pandoc",
@@ -253,7 +260,7 @@ sapientia =
             "smartmontools",
             "smem",
             "smemstat",
-            "snapd",
+            "snapd", -- see further below for installation of snap packages
             "socat",
             "speedtest-cli",
             "sqlite3",
@@ -350,7 +357,6 @@ sapientia =
             -- "ookla-speedtest",
             -- "opencascade-occt",
             -- "openh264",
-            -- "opera",
             -- "or-browser-bundle-bin",
             -- "oterm",
             -- "paperwork",
@@ -570,6 +576,12 @@ fLibrewolf _ =
     `assume` MadeChange
     `describe` "Librewolf repository enabled with extrepo"
 
+fOpera :: FilePath -> Property UnixLike
+fOpera p =
+  scriptProperty ["wget https://deb.opera.com/archive.key -qO- | gpg --dearmor -o " <> p]
+    `assume` MadeChange
+    `describe` "Opera repository key downloaded and saved"
+
 fVivaldi :: FilePath -> Property UnixLike
 fVivaldi p =
   scriptProperty ["wget https://repo.vivaldi.com/archive/linux_signing_key.pub -O- | gpg --dearmor -o " <> p]
@@ -595,7 +607,8 @@ fJellyfin p =
     `assume` MadeChange
     `describe` "Jellyfin repository key downloaded and saved"
 
-fHaskellStack  :: FilePath -> Property UnixLike
-fHaskellStack _ = scriptProperty ["curl -sSL https://get.haskellstack.org/ | sh"]
+fHaskellStack :: FilePath -> Property UnixLike
+fHaskellStack _ =
+  scriptProperty ["curl -sSL https://get.haskellstack.org/ | sh"]
     `assume` MadeChange
     `describe` "Haskell stack downloaded and installed"
