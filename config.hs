@@ -50,7 +50,9 @@ sapientia =
         & Apt.installed ["extrepo"]
         & File.checkOverwrite File.PreserveExisting "/etc/apt/sources.list.d/extrepo_librewolf.sources" fLibrewolf
         -- Opera webbrowser from their repository - https://deb.opera.com/manual.html
+        -- Remove redundant sources.list that is installed by the opera package.
         & File.checkOverwrite File.PreserveExisting "/usr/share/keyrings/opera-browser.gpg" fOpera
+        & File.notPresent "/etc/apt/sources.list.d/opera-stable.list"
         & "/etc/apt/sources.list.d/opera-archive.list"
           `File.hasContent` [ "deb [signed-by=/usr/share/keyrings/opera-browser.gpg] https://deb.opera.com/opera-stable/ stable non-free"
                             ]
@@ -245,6 +247,7 @@ sapientia =
             "pulsemixer",
             "pv",
             "python3-pip",
+            "qnapi",
             "rawtherapee",
             "rename",
             "restic",
@@ -266,6 +269,8 @@ sapientia =
             "sqlite3",
             "ssh",
             "sshfs",
+            "subdownloader",
+            "subliminal",
             "subtitlecomposer",
             "suckless-tools",
             "sweethome3d",
@@ -273,6 +278,7 @@ sapientia =
             "sweethome3d-furniture-editor",
             "sweethome3d-furniture-nonfree",
             "sysstat",
+            "sysvbanner",
             "thunderbird",
             "tidy",
             "tig",
@@ -312,7 +318,6 @@ sapientia =
             -- "aspellDicts.en-science",
             -- "aspellDicts.nl",
             -- "bandwhich",
-            -- "banner",
             -- "binutils-unwrapped",
             -- "bottom",
             -- "boxes",
@@ -372,7 +377,6 @@ sapientia =
             -- "skim",
             -- "snapper",
             -- "sourceHighlight",
-            -- "stack",
             -- "subdl",
             -- "subtitleeditor",
             -- "sutils",
@@ -534,6 +538,7 @@ sapientia =
 
 -- & Cron.runPropellor (Cron.Times "30 * * * *") -- TODO What is this for exactly?
 
+-- No longer needed with latest Propellor version (directly from git master)
 {-
 fAptSources :: [File.Line] -> [File.Line]
 fAptSources = map f
