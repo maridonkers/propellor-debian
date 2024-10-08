@@ -140,6 +140,10 @@ export EDITOR="vi"
 export QT_LOGGING_RULES="*=false"
 export FREETYPE_PROPERTIES="truetype:interpreter-version=38"
 
+# Workaround for Java VM to make it think xmonad is a parenting WM
+# https://wiki.haskell.org/Xmonad/Frequently_asked_questions#Using_SetWMName
+export _JAVA_AWT_WM_NONREPARENTING=1
+
 export DISPLAY=":0"
 # export TERM="xterm-256color"              # getting proper colors
 
