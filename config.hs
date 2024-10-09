@@ -47,6 +47,7 @@ sapientia =
       & Systemd.persistentJournal -- TODO What does this do?
       & Apt.installed ["lsb-release", "apt-transport-https", "ca-certificates", "wget"]
       -- Librewolf webbrowser from their repository - https://librewolf.net/debian-migration/
+      -- One time manual command may be required: apt-get update --allow-releaseinfo-change
       & Apt.installed ["extrepo"]
       & File.checkOverwrite File.PreserveExisting "/etc/apt/sources.list.d/extrepo_librewolf.sources" fLibrewolf
       -- Opera webbrowser from their repository - https://deb.opera.com/manual.html
