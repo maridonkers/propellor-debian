@@ -193,6 +193,7 @@ sapientia =
           "intel-microcode",
           "iotop",
           "isync",
+          "jami",
           "jellyfin",
           "jp2a",
           "jq",
