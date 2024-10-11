@@ -144,6 +144,10 @@ export FREETYPE_PROPERTIES="truetype:interpreter-version=38"
 # https://wiki.haskell.org/Xmonad/Frequently_asked_questions#Using_SetWMName
 export _JAVA_AWT_WM_NONREPARENTING=1
 
+# Guix configuration
+export GUIX_PROFILE="/home/mdo/.guix-profile"
+. "$GUIX_PROFILE/etc/profile"
+
 export DISPLAY=":0"
 # export TERM="xterm-256color"              # getting proper colors
 

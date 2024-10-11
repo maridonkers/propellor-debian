@@ -173,6 +173,7 @@ sapientia =
           "gnupg",
           "gpg",
           "graphviz",
+          -- "gwenview",
           -- "guix",
           "handbrake-cli",
           "hashcat",
@@ -197,6 +198,8 @@ sapientia =
           "jellyfin",
           "jp2a",
           "jq",
+          -- "kdenlive",
+          -- "kdiff3",
           "keepassxc",
           "ldraw-parts",
           "ledger",
@@ -230,6 +233,7 @@ sapientia =
           "nmap",
           "notmuch",
           "offlineimap",
+          "okular",
           "openscad",
           "openssl",
           "openvpn",
@@ -313,7 +317,6 @@ sapientia =
           "xterm",
           "ytfzf",
           "zathura"
-          -- "android-studio",
           -- "appimage-run",
           -- "aspellDicts.en",
           -- "aspellDicts.en-computers",
@@ -324,7 +327,6 @@ sapientia =
           -- "bottom",
           -- "boxes",
           -- "cbonsai",
-          -- "cdrkit",
           -- "cmatrix",
           -- "compsize",
           -- "cpdump",
@@ -460,9 +462,9 @@ sapientia =
           `File.hasContent` lines xmobarRc1
         & File.dirExists "/home/mdo/.config/nix"
         & "/home/mdo/.config/nix/nix.conf"
-      `File.containsLines` [ "extra-experimental-features = nix-command",
-                             "extra-experimental-features = flakes"
-                           ]
+        `File.containsLines` [ "extra-experimental-features = nix-command",
+                               "extra-experimental-features = flakes"
+                             ]
         & File.ownerGroup "/home/mdo/.config/nix/nix.conf" (User "mdo") (Group "mdo")
         -- Musikcube from downloaded archive
         -- TODO Get latest release as documented here: https://docs.github.com/en/repositories/releasing-projects-on-github/linking-to-releases
@@ -497,6 +499,20 @@ sapientia =
               `assume` MadeChange
               `describe` "KOReader installed"
           )
+        -- https://unix.stackexchange.com/questions/651673/install-guixsd-using-an-existing-linux-system
+        & File.checkOverwrite File.PreserveExisting "/usr/local/bin/guix" fGuix -- TODO
+        & "/home/mdo/.config/guix/channels.scm"
+        `File.containsLines` [ "(cons* (channel",
+                               "        (name 'nonguix)",
+                               "        (url \"https://gitlab.com/nonguix/nonguix\")",
+                               "        ;; Enable signature verification:",
+                               "        (introduction",
+                               "         (make-channel-introduction",
+                               "          \"897c1a470da759236cc11798f4e0a5f7d4d59fbc\"",
+                               "          (openpgp-fingerprint",
+                               "           \"2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5\"))))",
+                               "       %default-channels)"
+                             ]
         -- Install Haskell Stack -- https://docs.haskellstack.org/en/stable/install_and_upgrade/
         & File.checkOverwrite File.PreserveExisting "/usr/local/bin/stack" fHaskellStack
         -- Install snap packages
@@ -613,6 +629,12 @@ fJellyfin p =
   scriptProperty ["wget https://repo.jellyfin.org/debian/jellyfin_team.gpg.key -O- | gpg --dearmor -o " <> p]
     `assume` MadeChange
     `describe` "Jellyfin repository key downloaded and saved"
+
+fGuix :: FilePath -> Property UnixLike
+fGuix _ =
+  scriptProperty ["curl -sSL https://git.savannah.gnu.org/cgit/guix.git/plain/etc/guix-install.sh -o ~/guix-install.sh && chmod u+x ~/guix-install.sh && ~/guix-install.sh"]
+    `assume` MadeChange
+    `describe` "Guix downloaded and installed"
 
 fHaskellStack :: FilePath -> Property UnixLike
 fHaskellStack _ =
