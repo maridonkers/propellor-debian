@@ -229,7 +229,6 @@ sapientia =
           "net-tools",
           "network-manager",
           "nftables",
-          -- "nix-bin",
           "nmap",
           "notmuch",
           "offlineimap",
@@ -285,6 +284,7 @@ sapientia =
           "sweethome3d-furniture-nonfree",
           "sysstat",
           "sysvbanner",
+          "testdisk",
           "thunderbird",
           "tidy",
           "tig",
@@ -411,7 +411,7 @@ sapientia =
       & Group.hasUser (Group "kvm") (User "mdo")
       & Group.hasUser (Group "adm") (User "mdo")
       -- Use with lix — https://git.lix.systems/lix-project/lix
-      & Group.hasUser (Group "nix-users") (User "mdo")
+      -- & Group.hasUser (Group "nix-users") (User "mdo")
       -- Sudo'ers
       & Sudo.enabledFor (User "mdo")
       -- Secrets (to be included from ~/.bashrc files)
@@ -460,12 +460,14 @@ sapientia =
           `File.hasContent` lines xmobarRc0
         & "/home/mdo/.config/xmobar/xmobarrc1"
           `File.hasContent` lines xmobarRc1
+        {-
         & File.dirExists "/home/mdo/.config/nix"
         & "/home/mdo/.config/nix/nix.conf"
         `File.containsLines` [ "extra-experimental-features = nix-command",
                                "extra-experimental-features = flakes"
                              ]
         & File.ownerGroup "/home/mdo/.config/nix/nix.conf" (User "mdo") (Group "mdo")
+        -}
         -- Musikcube from downloaded archive
         -- TODO Get latest release as documented here: https://docs.github.com/en/repositories/releasing-projects-on-github/linking-to-releases
         -- TODO Determine asset name for latest release by reading HTML or perhaps get tag? Also checking if already installed does not really suffice (compare installed version against potential newer version?)

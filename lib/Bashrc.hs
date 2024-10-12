@@ -1,3 +1,4 @@
+
 {-# LANGUAGE QuasiQuotes #-}
 
 module Bashrc (bashrcMdo, bashrcRoot) where
@@ -147,6 +148,9 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 # Guix configuration
 export GUIX_PROFILE="/home/mdo/.guix-profile"
 . "$GUIX_PROFILE/etc/profile"
+
+# https://guix.gnu.org/manual/en/html_node/Invoking-guix-gc.html
+alias guix-garbage-collect="guix package --delete-generations && guix gc --collect-garbage"
 
 export DISPLAY=":0"
 # export TERM="xterm-256color"              # getting proper colors
