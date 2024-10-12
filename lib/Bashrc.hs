@@ -18,12 +18,6 @@ case $- in
       *) return;;
 esac
 
-# Include secrets
-if [ -r ~/.bashrc_secrets ]
-then
-    . ~/.bashrc_secrets 
-fi
-
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
@@ -128,29 +122,6 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# https://askubuntu.com/questions/432217/prevent-duplicate-entries-in-path
-[[ ":$PATH:" =~ ":~/bin:" ]] || PATH="$PATH:~/bin"
-[[ ":$PATH:" =~ ":~/.local/bin" ]] || PATH="~/.local/bin:$PATH"
-[[ ":$PATH:" =~ ":~/.cargo/bin" ]] || PATH="$PATH:~/.cargo/bin"
-[[ ":$PATH:" =~ ":~/.cabal/bin" ]] || PATH="$PATH:~/.cabal/bin"
-[[ ":$PATH:" =~ ":~/go/bin" ]] || PATH="$PATH:~/go/bin"
-[[ ":$PATH:" =~ ":~/.nix-profile/bin" ]] || PATH="$PATH:~/.nix-profile/bin"
-
-export EDITOR="vi"
-export QT_LOGGING_RULES="*=false"
-export FREETYPE_PROPERTIES="truetype:interpreter-version=38"
-
-# Workaround for Java VM to make it think xmonad is a parenting WM
-# https://wiki.haskell.org/Xmonad/Frequently_asked_questions#Using_SetWMName
-export _JAVA_AWT_WM_NONREPARENTING=1
-
-# Guix configuration
-export GUIX_PROFILE="/home/mdo/.guix-profile"
-. "$GUIX_PROFILE/etc/profile"
-
-export DISPLAY=":0"
-# export TERM="xterm-256color"              # getting proper colors
-
 # TODO What was this meant to do? Why switch off screen?
 # Determine if there's an HDMI monitor and switch off screen off if there is.
 # xrandr --listactivemonitors --verbose|grep '^HDMI-[0-9] connected ' > /dev/null
@@ -158,16 +129,6 @@ export DISPLAY=":0"
 # then
 #   xset s off -dpms
 # fi
-
-# Rust
-# https://internals.rust-lang.org/t/cargo-sparse-protocol-feedback-thread/18234
-export CARGO_REGISTRIES_CRATES_IO_PROTOCOL="sparse"
-
-# IHP
-export IHP_TELEMETRY_DISABLED=1
-export IHP_BROWSER=firefox
-export IHP_EDITOR="emacs"
-eval "$(direnv hook bash)"
 
 # https://www.atlassian.com/git/tutorials/dotfiles
 alias config='git --git-dir=/home/mdo/.cfg/ --work-tree=/home/mdo'
@@ -211,8 +172,6 @@ alias itnl="trans -s it -t nl"
 alias fren="trans -s fr -t en"
 
 alias xdg-list-paths="XDG_UTILS_DEBUG_LEVEL=2 xdg-mime query default text/html"
-
-export LYNX_LSS=$HOME/lynx.lss
 
 # EMH emh: displays help for command line e-mail commands
 alias emh="grep '^# EMH ' ~/.bashrc | sed -e 's/^# EMH //'"
@@ -326,15 +285,6 @@ alias fr-franceinfo="mpv https://www.youtube.com/watch?v=Z-Nwo-ypKtM &"
 alias en-dw="mpv https://www.youtube.com/watch?v=tZT2MCYu6Zw &"
 alias en-euronews="mpv https://www.youtube.com/watch?v=pykpO5kQJ98 &"
 alias en-france24="mpv https://www.youtube.com/watch?v=Ap-UM1O9RBU &"
-
-export LESSOPEN="| highlight --out-format=xterm256 --style=clarity %s"
-export LESS=' -R '
-
-# Security CAM.
-export SC_IPADDRESS="192.168.1.4"
-
-export COWPATH="${HOME}/lib/cowfiles.nixos:${HOME}/lib/cowfiles"
-#~/bin/randomcowsay
 
 # https://gitlab.com/dwt1/dotfiles/-/blob/master/.bashrc
 if [[ ${EUID} == 0 ]] ; then
