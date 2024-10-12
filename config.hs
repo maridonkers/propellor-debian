@@ -1,7 +1,6 @@
 -- This is the main configuration file for Propellor, and is used to build
 -- the propellor program.
 
-import Bashprofile (bashprofileMdo)
 import Bashrc (bashrcMdo, bashrcRoot)
 import Data.List
 import I3 (i3Config, i3StatusConfig)
@@ -427,8 +426,6 @@ sapientia =
         & "/root/.bashrc"
           `File.hasContent` lines bashrcRoot
         & File.dirExists "/home/mdo"
-        & "/home/mdo/.bash_profile"
-          `File.hasContent` lines bashprofileMdo
         & "/home/mdo/.bashrc"
           `File.hasContent` lines bashrcMdo
         & File.dirExists "/home/mdo/.mutt"

@@ -18,7 +18,6 @@ Extra-Source-Files:
   config-simple.hs
   config-freebsd.hs
   joeyconfig.hs
-  lib/Bashprofile.hs
   lib/Bashrc.hs
   lib/I3.hs
   lib/Muttrc.hs
@@ -248,7 +247,7 @@ Library
     Paths_propellor
 
 Library propellor-lib
-  Exposed-Modules:     Bashprofile, Bashrc,I3,Muttrc,Nftables,Quasiquote,Tmux,Xmonad,Xwindows
+  Exposed-Modules:     Bashrc,I3,Muttrc,Nftables,Quasiquote,Tmux,Xmonad,Xwindows
   Hs-Source-Dirs:      lib
   Build-Depends:       base, template-haskell
   Default-Language:    Haskell2010
