@@ -81,6 +81,8 @@ sapientia =
                             "Architectures: amd64",
                             "Signed-By: /usr/share/keyrings/jellyfin.gpg"
                           ]
+      -- https://github.com/nodesource/distributions
+      & File.checkOverwrite File.PreserveExisting "/etc/apt/sources.list.d/nodesource.list" fNodeJS
       -- Configure standard sources; update & upgrade
       & Apt.stdSourcesList
       -- No longer needed with latest Propellor version (directly from git master)
@@ -230,6 +232,7 @@ sapientia =
           "network-manager",
           "nftables",
           "nmap",
+          "nodejs",
           "notmuch",
           "offlineimap",
           "okular",
@@ -631,6 +634,12 @@ fJellyfin p =
   scriptProperty ["wget https://repo.jellyfin.org/debian/jellyfin_team.gpg.key -O- | gpg --dearmor -o " <> p]
     `assume` MadeChange
     `describe` "Jellyfin repository key downloaded and saved"
+
+fNodeJS :: FilePath -> Property UnixLike
+fNodeJS _ =
+  scriptProperty ["curl -sSL https://deb.nodesource.com/setup_22.x | sh"]
+    `assume` MadeChange
+    `describe` "NodeJS repository key downloaded and saved"
 
 fGuix :: FilePath -> Property UnixLike
 fGuix _ =
