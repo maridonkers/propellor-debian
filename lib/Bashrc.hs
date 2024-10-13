@@ -135,7 +135,9 @@ fi
 [[ ":$PATH:" =~ ":~/.cargo/bin" ]] || PATH="$PATH:~/.cargo/bin"
 [[ ":$PATH:" =~ ":~/.cabal/bin" ]] || PATH="$PATH:~/.cabal/bin"
 [[ ":$PATH:" =~ ":~/go/bin" ]] || PATH="$PATH:~/go/bin"
-[[ ":$PATH:" =~ ":~/.nix-profile/bin" ]] || PATH="$PATH:~/.nix-profile/bin"
+[[ ":$PATH:" =~ ":~/.npm-global/bin" ]] || PATH="$PATH:~/.npm-global/bin"
+
+#[[ ":$PATH:" =~ ":~/.nix-profile/bin" ]] || PATH="$PATH:~/.nix-profile/bin"
 
 export EDITOR="vi"
 export QT_LOGGING_RULES="*=false"
