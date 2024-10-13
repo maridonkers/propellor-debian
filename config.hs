@@ -313,6 +313,7 @@ sapientia =
           "x11-utils",
           "xdotool",
           "xinit", --TODO
+          "xinput",
           "xmobar",
           "xmonad",
           "xsane",
