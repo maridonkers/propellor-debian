@@ -433,7 +433,6 @@ sapientia =
         & File.dirExists "/home/mdo"
         & "/home/mdo/.bashrc"
           `File.hasContent` lines bashrcMdo
-          -- `File.mode 700` or FileWriteMode ?
         & File.dirExists "/home/mdo/.mutt"
         & "/home/mdo/.mutt/account.org.photonsphere.contact"
       `File.hasPrivContentExposed` (Context "sapientia.mdo.muttrc.account.org.photonsphere.contact.secrets")
@@ -480,7 +479,9 @@ sapientia =
         -- https://hackage.haskell.org/package/req-3.2.0/docs/Network-HTTP-Req.html
         -- Julia from their installer
         -- https://docs.julialang.org/en/v1.11/manual/installation/
+        & File.mode "/home/mdo/.bashrc" 700 -- or FileWriteMode ?
         & File.checkOverwrite File.PreserveExisting "/home/mdo/.juliaup/bin/julia" (fJulia "mdo")
+        & File.mode "/home/mdo/.bashrc" 500 -- or FileWriteMode ?
         & check
           (not <$> Apt.isInstalled "musikcube")
           -- Via: https://github.com/clangen/musikcube/releases/latest/musikcube_3.0.4_linux_x86_64.deb"
@@ -649,7 +650,7 @@ fNodeJS _ =
 
 fJulia :: String -> FilePath -> Property UnixLike
 fJulia user _ =
-  userScriptProperty (User user) ["chmod u+w ~/.bashrc; curl -fsSL https://install.julialang.org | sh -s -- --yes"]
+  userScriptProperty (User user) ["curl -fsSL https://install.julialang.org | sh -s -- --yes"]
     `assume` MadeChange
     `describe` ("User: " <> user <> " -- Julia downloaded and installed")
 
