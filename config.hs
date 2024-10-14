@@ -651,7 +651,7 @@ fJulia :: String -> FilePath -> Property UnixLike
 fJulia user _ =
   userScriptProperty (User user) ["chmod u+w ~/.bashrc; curl -fsSL https://install.julialang.org | sh -s -- --yes"]
     `assume` MadeChange
-    `describe` "Julia  downloaded and installed"
+    `describe` ("User: " <> user <> " -- Julia downloaded and installed")
 
 fGuix :: FilePath -> Property UnixLike
 fGuix _ =
