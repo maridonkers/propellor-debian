@@ -81,6 +81,7 @@ sapientia =
                             "Architectures: amd64",
                             "Signed-By: /usr/share/keyrings/jellyfin.gpg"
                           ]
+      -- NodeJS from their installer
       -- https://github.com/nodesource/distributions
       & File.checkOverwrite File.PreserveExisting "/etc/apt/sources.list.d/nodesource.list" fNodeJS
       -- Configure standard sources; update & upgrade
@@ -432,6 +433,7 @@ sapientia =
         & File.dirExists "/home/mdo"
         & "/home/mdo/.bashrc"
           `File.hasContent` lines bashrcMdo
+          -- `File.mode 700` or FileWriteMode ?
         & File.dirExists "/home/mdo/.mutt"
         & "/home/mdo/.mutt/account.org.photonsphere.contact"
       `File.hasPrivContentExposed` (Context "sapientia.mdo.muttrc.account.org.photonsphere.contact.secrets")
@@ -476,6 +478,9 @@ sapientia =
         -- TODO Get latest release as documented here: https://docs.github.com/en/repositories/releasing-projects-on-github/linking-to-releases
         -- TODO Determine asset name for latest release by reading HTML or perhaps get tag? Also checking if already installed does not really suffice (compare installed version against potential newer version?)
         -- https://hackage.haskell.org/package/req-3.2.0/docs/Network-HTTP-Req.html
+        -- Julia from their installer
+        -- https://docs.julialang.org/en/v1.11/manual/installation/
+        & File.checkOverwrite File.PreserveExisting "/home/mdo/.juliaup/bin/julia" fJulia
         & check
           (not <$> Apt.isInstalled "musikcube")
           -- Via: https://github.com/clangen/musikcube/releases/latest/musikcube_3.0.4_linux_x86_64.deb"
@@ -640,7 +645,13 @@ fNodeJS :: FilePath -> Property UnixLike
 fNodeJS _ =
   scriptProperty ["curl -sSL https://deb.nodesource.com/setup_22.x | sh"]
     `assume` MadeChange
-    `describe` "NodeJS repository key downloaded and saved"
+    `describe` "NodeJS downloaded and installed"
+
+fJulia :: FilePath -> Property UnixLike
+fJulia _ =
+  userScriptProperty (User "mdo") ["chmod u+w ~/.bashrc; curl -fsSL https://install.julialang.org | sh -s -- --yes"]
+    `assume` MadeChange
+    `describe` "Julia  downloaded and installed"
 
 fGuix :: FilePath -> Property UnixLike
 fGuix _ =
