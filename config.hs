@@ -480,7 +480,7 @@ sapientia =
         -- https://hackage.haskell.org/package/req-3.2.0/docs/Network-HTTP-Req.html
         -- Julia from their installer
         -- https://docs.julialang.org/en/v1.11/manual/installation/
-        & File.checkOverwrite File.PreserveExisting "/home/mdo/.juliaup/bin/julia" fJulia
+        & File.checkOverwrite File.PreserveExisting "/home/mdo/.juliaup/bin/julia" (fJulia "mdo")
         & check
           (not <$> Apt.isInstalled "musikcube")
           -- Via: https://github.com/clangen/musikcube/releases/latest/musikcube_3.0.4_linux_x86_64.deb"
@@ -647,9 +647,9 @@ fNodeJS _ =
     `assume` MadeChange
     `describe` "NodeJS downloaded and installed"
 
-fJulia :: FilePath -> Property UnixLike
-fJulia _ =
-  userScriptProperty (User "mdo") ["chmod u+w ~/.bashrc; curl -fsSL https://install.julialang.org | sh -s -- --yes"]
+fJulia :: String -> FilePath -> Property UnixLike
+fJulia user _ =
+  userScriptProperty (User user) ["chmod u+w ~/.bashrc; curl -fsSL https://install.julialang.org | sh -s -- --yes"]
     `assume` MadeChange
     `describe` "Julia  downloaded and installed"
 
