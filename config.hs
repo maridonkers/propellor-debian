@@ -51,9 +51,9 @@ sapientia =
       & Apt.installed ["extrepo"]
       & File.checkOverwrite File.PreserveExisting "/etc/apt/sources.list.d/extrepo_librewolf.sources" fLibrewolf
       -- Opera webbrowser from their repository - https://deb.opera.com/manual.html
-      & File.checkOverwrite File.PreserveExisting "/usr/share/keyrings/opera-browser.gpg" fOpera
       -- (remove redundant sources.list that is installed by the opera package)
       & File.notPresent "/etc/apt/sources.list.d/opera-stable.list"
+      & File.checkOverwrite File.PreserveExisting "/usr/share/keyrings/opera-browser.gpg" fOpera
       & "/etc/apt/sources.list.d/opera-archive.list"
         `File.hasContent` [ "deb [signed-by=/usr/share/keyrings/opera-browser.gpg] https://deb.opera.com/opera-stable/ stable non-free"
                           ]
@@ -526,7 +526,12 @@ sapientia =
                                "       %default-channels)"
                              ]
         -- Install Haskell Stack -- https://docs.haskellstack.org/en/stable/install_and_upgrade/
-        & File.checkOverwrite File.PreserveExisting "/usr/local/bin/stack" fHaskellStack
+        -- TODO Install ghcup instead? (installs non-root?) https://www.haskell.org/ghcup/
+        -- These commands should be run as non-root/non-admin user:
+        -- curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
+        -- Forget it: install ghcup (and stack via it) manually
+        -- & File.checkOverwrite File.PreserveExisting "/usr/local/bin/stack" fHaskellStack
+        -- & File.checkOverwrite File.PreserveExisting "~/.ghcup" (fGhcup "mdo") -- TODO
         -- Install snap packages
         & propertyList
           "Install snap packages"
@@ -660,8 +665,18 @@ fGuix _ =
     `assume` MadeChange
     `describe` "Guix downloaded and installed"
 
+{-
+fGhcup :: FilePath -> String -> Property UnixLike
+fGhcup user _ =
+  userScriptProperty (User user) ["curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh"]
+    `assume` MadeChange
+    `describe` "ghcup downloaded and installed"
+-}
+
+{-
 fHaskellStack :: FilePath -> Property UnixLike
 fHaskellStack _ =
   scriptProperty ["curl -sSL https://get.haskellstack.org/ | sh"]
     `assume` MadeChange
     `describe` "Haskell stack downloaded and installed"
+-}
