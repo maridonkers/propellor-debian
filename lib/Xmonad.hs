@@ -80,7 +80,7 @@ import XMonad.Layout.Grid (Grid (..))
 import XMonad.Layout.IndependentScreens
 import XMonad.Layout.MultiColumns
 import XMonad.Layout.NoBorders
-  ( hasBorder,
+  ( -- hasBorder,
     noBorders,
     smartBorders,
   )
@@ -194,9 +194,6 @@ myKeepassXc = "keepassxc"
 
 myThunderbird :: String
 myThunderbird = "thunderbird"
-
-myFirefox :: String
-myFirefox = "firefox"
 
 myOpera :: String
 myOpera = "opera"
@@ -345,7 +342,8 @@ vlcPrompt _ = do
 -- https://hackage.haskell.org/package/xmonad-contrib-0.16/docs/XMonad-Util-EZConfig.html
 keysAdditional :: [(String, X ())]
 keysAdditional =
-  [ ("M-S-q", confirmPrompt myXPConfig "exit" (io exitSuccess)),
+  [ ("M-q", spawn "PATH='/usr/bin' xmonad --recompile && xmonad --restart"), -- set PATH to use system ghc
+    ("M-S-q", confirmPrompt myXPConfig "exit" (io exitSuccess)),
     ("M-p", shellPrompt myXPConfig),
     ("M-<Home>", sendMessage (Toggle "Full")),
     ("M-<Space>", sendMessage (Toggle "Full") >> sendMessage ToggleStruts),

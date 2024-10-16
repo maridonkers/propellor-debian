@@ -208,6 +208,7 @@ sapientia =
           "ledger",
           "leocad",
           "lftp",
+          "libghc-xmonad-contrib-dev",
           "libpq-dev",
           "librecad",
           "libreoffice",

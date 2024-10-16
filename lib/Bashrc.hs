@@ -149,7 +149,8 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 
 # Guix configuration
 export GUIX_PROFILE="/home/mdo/.guix-profile"
-. "$GUIX_PROFILE/etc/profile"
+# TODO Commented out the source command below because of redundancy in PATH
+# . "$GUIX_PROFILE/etc/profile"
 
 # https://guix.gnu.org/manual/en/html_node/Invoking-guix-gc.html
 alias guix-garbage-collect="guix package --delete-generations && guix gc --collect-garbage"
