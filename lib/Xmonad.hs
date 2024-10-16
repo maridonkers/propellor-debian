@@ -201,6 +201,9 @@ myOpera = "opera"
 myChromium :: String
 myChromium = "chromium"
 
+myFalkon :: String
+myFalkon = "falkon"
+
 myLibreWolf :: String
 myLibreWolf = "librewolf"
 
@@ -358,6 +361,7 @@ keysAdditional =
     ("M-c", spawn myCursorToggle),
     ("M-C-<Return>", spawn myFloatingTerminal),
     ("M-e", spawn myEditor),
+    ("M-f", spawn myFileManager),
     ("M-o", spawn myOpera),
     ("M-u", spawn $ "librewolf --new-window " <> "$(xsel)"),
     ("M-S-u", webPrompt "librewolf"),
@@ -370,7 +374,7 @@ keysAdditional =
     ("M-/ b", spawn myBrave),
     ("M-/ c", spawn myChromium),
     ("M-/ e", spawn myEditor),
-    ("M-/ f", spawn myFileManager),
+    ("M-/ f", spawn myFalkon),
     ("M-/ h", spawn myFloatingGHCI),
     ("M-/ i", spawn myFloatingPython),
     ("M-/ k", spawn myKeepassXc),
