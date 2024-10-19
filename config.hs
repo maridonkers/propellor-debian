@@ -107,8 +107,8 @@ sapientia =
       -- Docker
       & Docker.installed
       -- Install base packages
-      & Apt.installed
-        [ "android-file-transfer",
+      & Apt.installed [
+          "android-file-transfer",
           "apktool",
           "apt-listbugs",
           "arandr",
@@ -374,7 +374,6 @@ sapientia =
           -- "ookla-speedtest",
           -- "opencascade-occt",
           -- "openh264",
-          -- "or-browser-bundle-bin",
           -- "oterm",
           -- "paperwork",
           -- "pavucontrol",
@@ -405,7 +404,8 @@ sapientia =
         ]
       -- Backports packages
       & Apt.backportInstalled
-        [ "sabnzbdplus",
+        [
+          "sabnzbdplus",
           "yt-dlp"
         ]
       -- Users and groups

@@ -201,7 +201,9 @@ myOpera = "opera"
 myChromium :: String
 myChromium = "chromium"
 
+-- Dark mode is always on (which is a bit cumbersome)
 myFalkon :: String
+-- myFalkon = "QTWEBENGINE_CHROMIUM_FLAGS=--blink-settings=forceDarkModeEnabled=true falkon"
 myFalkon = "falkon"
 
 myLibreWolf :: String
@@ -362,9 +364,9 @@ keysAdditional =
     ("M-C-<Return>", spawn myFloatingTerminal),
     ("M-e", spawn myEditor),
     ("M-f", spawn myFileManager),
-    ("M-o", spawn myOpera),
-    ("M-u", spawn $ "librewolf --new-window " <> "$(xsel)"),
-    ("M-S-u", webPrompt "librewolf"),
+    ("M-o", spawn myFalkon),
+    ("M-u", spawn $ "falkon --new-window " <> "$(xsel)"),
+    ("M-S-u", webPrompt "falkon"),
     ("M-v", spawn $ printf "vlc " <> "$(xsel)"),
     ("M-S-v", vlcPrompt "vlc"),
     ("M-w", spawn myLibreWolf),
@@ -374,7 +376,6 @@ keysAdditional =
     ("M-/ b", spawn myBrave),
     ("M-/ c", spawn myChromium),
     ("M-/ e", spawn myEditor),
-    ("M-/ f", spawn myFalkon),
     ("M-/ h", spawn myFloatingGHCI),
     ("M-/ i", spawn myFloatingPython),
     ("M-/ k", spawn myKeepassXc),
