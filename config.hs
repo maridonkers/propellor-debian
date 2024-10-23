@@ -57,6 +57,8 @@ sapientia =
       & "/etc/apt/sources.list.d/opera-archive.list"
         `File.hasContent` [ "deb [signed-by=/usr/share/keyrings/opera-browser.gpg] https://deb.opera.com/opera-stable/ stable non-free"
                           ]
+      -- It may have been recreated... (use extreme prejudice, just to be safe)
+      & File.notPresent "/etc/apt/sources.list.d/opera-stable.list"
       -- Vivaldi webbrowser from their repository - https://itsfoss.com/install-vivaldi-ubuntu-linux/
       & File.checkOverwrite File.PreserveExisting "/usr/share/keyrings/vivaldi-browser.gpg" fVivaldi
       & "/etc/apt/sources.list.d/vivaldi-archive.list"
@@ -89,6 +91,7 @@ sapientia =
       -- No longer needed with latest Propellor version (directly from git master)
       -- `onChange` File.fileProperty "Add non-free-firmware" fAptSources "/etc/apt/sources.list"
       -- & Apt.unattendedUpgrades -- TODO Is this useful?
+      & Apt.cacheCleaned
       & Apt.update
       & Apt.upgrade
       -- File systems for data partitions
@@ -111,6 +114,7 @@ sapientia =
           "android-file-transfer",
           "apktool",
           "apt-listbugs",
+          "apt-listchanges",
           "arandr",
           "aria2",
           "ark",
