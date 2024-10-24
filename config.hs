@@ -110,8 +110,10 @@ sapientia =
       -- Docker
       & Docker.installed
       -- Install base packages
-      & Apt.installed [
+      & Apt.installed
+        [ "adb",
           "android-file-transfer",
+          "android-sdk-platform-tools-common",
           "apktool",
           "apt-listbugs",
           "apt-listchanges",
@@ -408,8 +410,7 @@ sapientia =
         ]
       -- Backports packages
       & Apt.backportInstalled
-        [
-          "sabnzbdplus",
+        [ "sabnzbdplus",
           "yt-dlp"
         ]
       -- Users and groups
@@ -550,10 +551,8 @@ sapientia =
                       `describe` (p <> " installed")
                 )
                 -- Put snap packages to install here.
-                [ -- "android-platform-tools", -- TODO warning `classic` snap package
-                  -- "android-studio", -- TODO warning `classic` snap package
-                  "androidsdk",
-                  "freetube"
+                [ "freetube",
+                  "whatsdesk"
                 ]
           )
         -- Timezone
