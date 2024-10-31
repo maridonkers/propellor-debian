@@ -12,7 +12,7 @@ import qualified Propellor.Property.Docker as Docker
 import qualified Propellor.Property.File as File
 import qualified Propellor.Property.Fstab as Fstab
 import qualified Propellor.Property.Group as Group
-import qualified Propellor.Property.Grub as Grub
+-- import qualified Propellor.Property.Grub as Grub
 import qualified Propellor.Property.Laptop as Laptop
 import qualified Propellor.Property.Ssh as Ssh
 import qualified Propellor.Property.Sudo as Sudo
@@ -42,7 +42,7 @@ sapientia =
       & osDebian (Stable "bookworm") X86_64
       & Laptop.powertopAutoTuneOnBoot -- TODO What does this do?
       -- & Laptop.trimSSD -- TODO don't have SSDs
-      & Grub.cmdline_Linux_default "i915.enable_psr=1" -- TODO What does this do?
+      -- & Grub.cmdline_Linux_default "i915.enable_psr=1" -- TODO What does this do?
       -- ! Grub.cmdline_Linux "quiet splash" -- TODO Does this work?
       & Systemd.persistentJournal -- TODO What does this do?
       & Apt.installed ["lsb-release", "apt-transport-https", "ca-certificates", "wget"]
@@ -50,6 +50,7 @@ sapientia =
       -- One time manual command may be required: apt-get update --allow-releaseinfo-change
       & Apt.installed ["extrepo"]
       & File.checkOverwrite File.PreserveExisting "/etc/apt/sources.list.d/extrepo_librewolf.sources" fLibrewolf
+      {-
       -- Opera webbrowser from their repository - https://deb.opera.com/manual.html
       -- (remove redundant sources.list that is installed by the opera package)
       & File.notPresent "/etc/apt/sources.list.d/opera-stable.list"
@@ -59,6 +60,7 @@ sapientia =
                           ]
       -- It may have been recreated... (use extreme prejudice, just to be safe)
       & File.notPresent "/etc/apt/sources.list.d/opera-stable.list"
+      -}
       -- Vivaldi webbrowser from their repository - https://itsfoss.com/install-vivaldi-ubuntu-linux/
       & File.checkOverwrite File.PreserveExisting "/usr/share/keyrings/vivaldi-browser.gpg" fVivaldi
       & "/etc/apt/sources.list.d/vivaldi-archive.list"
@@ -113,7 +115,8 @@ sapientia =
       & Apt.installed
         [ "adb",
           "android-file-transfer",
-          "android-sdk-platform-tools-common",
+          -- "android-sdk",
+          -- "android-sdk-platform-tools-common",
           "apktool",
           "apt-listbugs",
           "apt-listchanges",
@@ -142,6 +145,7 @@ sapientia =
           "darcs",
           "ddrescueview",
           "ddrutility",
+          "default-jdk",
           "dict",
           "direnv",
           "dmidecode",
@@ -248,7 +252,7 @@ sapientia =
           "openscad",
           "openssl",
           "openvpn",
-          "opera-stable",
+          -- "opera-stable",
           "ormolu",
           "p7zip",
           "pandoc",
@@ -275,6 +279,7 @@ sapientia =
           "safecopy",
           "screen",
           "scrot",
+          "sdkmanager",
           "silversearcher-ag",
           "slrn",
           "smartmontools",
@@ -622,11 +627,13 @@ fLibrewolf _ =
     `assume` MadeChange
     `describe` "Librewolf repository enabled with extrepo"
 
+{-
 fOpera :: FilePath -> Property UnixLike
 fOpera p =
   scriptProperty ["wget https://deb.opera.com/archive.key -qO- | gpg --dearmor -o " <> p]
     `assume` MadeChange
     `describe` "Opera repository key downloaded and saved"
+-}
 
 fVivaldi :: FilePath -> Property UnixLike
 fVivaldi p =
