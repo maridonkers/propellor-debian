@@ -154,6 +154,7 @@ export GUIX_PROFILE="/home/mdo/.guix-profile"
 
 # https://guix.gnu.org/manual/en/html_node/Invoking-guix-gc.html
 alias guix-garbage-collect="guix package --delete-generations && guix gc --collect-garbage"
+alias guix-list-installed="guix package --list-installed"
 
 export DISPLAY=":0"
 # export TERM="xterm-256color"              # getting proper colors
@@ -302,7 +303,7 @@ alias lsblks="lsblk -o +FSSIZE,FSAVAIL,PTTYPE,HOTPLUG,UUID"
 
 alias eip4="dig +short myip.opendns.com @resolver1.opendns.com"
 
-alias security="lynx https://www.debian.org/security/"
+alias security="w3m https://www.debian.org/security/"
 
 function mpv-dvd() {
     mpv dvd://$1 --dvd-device="$2"

@@ -165,6 +165,9 @@ myFocusedBorderColor = "#ff0000"
 myEditor :: String
 myEditor = "bin/ec"
 
+myFreetube :: String
+myFreetube = "freetube"
+
 myScreendump :: String
 myScreendump = "scrot"
 
@@ -376,6 +379,7 @@ keysAdditional =
     ("M-/ b", spawn myBrave),
     ("M-/ c", spawn myChromium),
     ("M-/ e", spawn myEditor),
+    ("M-/ f", spawn myFreetube),
     ("M-/ h", spawn myFloatingGHCI),
     ("M-/ i", spawn myFloatingPython),
     ("M-/ k", spawn myKeepassXc),
