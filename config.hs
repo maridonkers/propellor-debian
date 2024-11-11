@@ -71,6 +71,8 @@ sapientia =
       & "/etc/apt/sources.list.d/brave-browser-release.list"
         `File.hasContent` [ "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"
                           ]
+      -- Symfony CLI from their repository (doesn't work trivially because of their sudo bash check... wtf?)
+      -- & File.checkOverwrite File.PreserveExisting "/etc/apt/trusted.gpg.d/symfony-stable.gpg" (fSymfonyCli "mdo")
       -- Jellycli pre-built binary from GitHub
       -- https://github.com/tryffel/jellycli
       & File.checkOverwrite File.PreserveExisting "/usr/local/bin/jellycli" fJellycli
@@ -299,6 +301,7 @@ sapientia =
           "sweethome3d-furniture",
           "sweethome3d-furniture-editor",
           "sweethome3d-furniture-nonfree",
+          -- "symfony-cli",
           "sysstat",
           "sysvbanner",
           "tcpdump",
@@ -653,6 +656,15 @@ fJellycli p =
   scriptProperty ["wget https://github.com/tryffel/jellycli/releases/download/v0.9.1/jellycli_0.9.1_Linux_x86_64 -O " <> p]
     `assume` MadeChange
     `describe` "Jellycli binary downloaded and saved"
+
+{-
+-- curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | sudo -E bash
+fSymfonyCli :: String -> FilePath -> Property UnixLike
+fSymfonyCli user _ =
+  userScriptProperty (User user) ["curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | sudo -E bash"]
+    `assume` MadeChange
+    `describe` "Symfony CLI repository installed"
+-}
 
 fJellyfin :: FilePath -> Property UnixLike
 fJellyfin p =
