@@ -262,6 +262,8 @@ sapientia =
           "pass",
           "pciutils",
           "pcmanfm",
+          "php-cli",
+          "php-xml",
           "plantuml", -- "plantuml-c4"
           "poppler-utils",
           "psensor",

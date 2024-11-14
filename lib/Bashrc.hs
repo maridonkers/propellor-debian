@@ -155,6 +155,7 @@ export GUIX_PROFILE="/home/mdo/.guix-profile"
 # https://guix.gnu.org/manual/en/html_node/Invoking-guix-gc.html
 alias guix-garbage-collect="guix package --delete-generations && guix gc --collect-garbage"
 alias guix-list-installed="guix package --list-installed"
+alias guix-update="guix pull && guix package -u"
 
 export DISPLAY=":0"
 # export TERM="xterm-256color"              # getting proper colors
