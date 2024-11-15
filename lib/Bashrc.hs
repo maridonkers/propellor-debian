@@ -311,6 +311,7 @@ function mpv-dvd() {
 }
 
 alias sophia="ssh -i ~/.ssh/id_rsa-sophia mdo@192.168.1.43"
+alias styssh="ssh -i ~/.ssh/id_ed25519 -p 2022 192.168.1.154"
 alias tarssh="ssh -i ~/.ssh/id_rsa-tartarus -p 2022 u0_a44@192.168.1.205"
 
 alias dcdf="tarssh '(cd ~/storage/movies/DroidDashcam/Temporary; df -h .)'"
