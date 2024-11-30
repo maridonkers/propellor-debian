@@ -181,7 +181,8 @@ eval "$(direnv hook bash)"
 # https://www.atlassian.com/git/tutorials/dotfiles
 alias config='git --git-dir=/home/mdo/.cfg/ --work-tree=/home/mdo'
 
-alias b="batcat -n"
+alias b="batcat"
+alias bn="batcat -n"
 alias v="nvim -R"
 alias md="mdcat -p"
 alias lcat="less -EX"
@@ -195,6 +196,7 @@ alias l="exa"
 alias ll="exa -l"
 alias lls="exa -ls modified"
 
+alias hlocate="locate -d /home/locatedb"
 alias lsb="lsblk -o PATH,SIZE,FSTYPE,MOUNTPOINTS,UUID"
 
 alias tma="tmux attach-session -t"

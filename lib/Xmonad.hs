@@ -177,6 +177,9 @@ myFloatingGHCI = "xterm -title \"floatterm\" -e \"exec ghci\""
 myFloatingPython :: String
 myFloatingPython = "xterm -title \"floatterm\" -e \"exec python3\""
 
+myFloatingPHP :: String
+myFloatingPHP = "xterm -title \"floatterm\" -e \"exec php -a\""
+
 myFloatingMutt :: String
 myFloatingMutt = "xterm -title \"floatterm\" -geometry 115x35  -e \"exec mutt\""
 
@@ -376,6 +379,7 @@ keysAdditional =
     ("M-y", spawn $ "mpv " <> "$(xsel)"),
     ("M-S-y", mpvPrompt "mpv"),
     
+    ("M-/ a", spawn myMusicPlayer),
     ("M-/ b", spawn myBrave),
     ("M-/ c", spawn myChromium),
     ("M-/ e", spawn myEditor),
@@ -386,8 +390,7 @@ keysAdditional =
     ("M-/ l", spawn myLibreOffice),
     ("M-/ m", spawn myFloatingMutt),
     ("M-/ o", spawn myTorBrowser),
-    ("M-/ p", spawn myMusicPlayer),
-    ("M-/ r", spawn myKOReader),
+    ("M-/ p", spawn myFloatingPHP),
     ("M-/ u", spawn myFloatingSlrn),
     ("M-/ t", spawn myThunderbird),
     ("M-/ v", spawn myVivaldi),
