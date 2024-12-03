@@ -135,7 +135,7 @@ sapientia =
           "btrfs-heatmap",
           "btrfs-progs",
           "build-essential",
-          -- "cabal-install", -- TODO
+          -- "cabal-install", -- implicit due to xmonad
           "calibre",
           "ccache",
           "chromium",
@@ -181,7 +181,7 @@ sapientia =
           "fzf",
           "gddrescue",
           "genisoimage",
-          -- "ghc", -- TODO
+          -- "ghc", -- implicit due to xmonad
           "gimp",
           "git-crypt",
           "git-lfs",
